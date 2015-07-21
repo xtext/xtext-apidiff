@@ -1,0 +1,49 @@
+rm -rf output tmf-xtext-Update-2.8.4 tmf-xtext-Update-2.9.0
+
+if [ ! -f japicmp-ext.jar ];
+then
+   cp /shared/modeling/tmf/xtext/japicmp-ext.jar .
+fi
+
+if [ ! -d tmf-xtext-Update-2.8.2 ];
+then
+   wget -q 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.8.2/R201504100559/tmf-xtext-Update-2.8.2.zip'
+   unzip -q tmf-xtext-Update-2.8.2.zip -d tmf-xtext-Update-2.8.2
+fi
+
+if [ ! -d tmf-xtext-Update-2.8.3 ];
+then
+   wget -q 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.8.3/R201506010551/tmf-xtext-Update-2.8.3.zip'
+   unzip -q tmf-xtext-Update-2.8.3.zip -d tmf-xtext-Update-2.8.3
+fi
+
+if [ ! -d tmf-xtext-Update-2.8.4 ];
+then
+   wget -q 'https://hudson.eclipse.org/xtext/job/xtext-xtend-maintenance/lastSuccessfulBuild/artifact/build-result/p2.repository/plugins/*zip*/plugins.zip'
+   unzip -q plugins.zip -d tmf-xtext-Update-2.8.4
+   rm plugins.zip
+fi
+
+
+if [ ! -d tmf-xtext-Update-2.9.0 ];
+then
+   wget -q 'https://hudson.eclipse.org/xtext/job/xtext-xtend/lastSuccessfulBuild/artifact/build-result/p2.repository/plugins/*zip*/plugins.zip'
+   unzip -q plugins.zip -d tmf-xtext-Update-2.9.0
+   rm plugins.zip
+fi
+
+
+if [ ! -d eclipse ];
+then
+   wget -q 'http://download.eclipse.org/technology/epp/downloads/release/mars/RC3/eclipse-dsl-mars-RC3-linux-gtk-x86_64.tar.gz'
+   tar -zxf eclipse-dsl-mars-RC3-linux-gtk-x86_64.tar.gz
+fi
+
+{
+	echo "old.version=${OLD_VERSION}"
+	echo "new.version=${NEW_VERSION}"
+	echo "old.location=tmf-xtext-Update-${OLD_VERSION}/plugins/"
+	echo "new.location=tmf-xtext-Update-${NEW_VERSION}/plugins/"
+	echo "cpLocation=eclipse/plugins"
+
+} > japicmp.properties

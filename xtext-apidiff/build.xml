@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project xtext-apidiff">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="/Users/dhuebner/Entwicklung/workspace"/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/japicmp-ext.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="de.dhuebner.japicmp.CheckFolder"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <zipfileset excludes="META-INF/*.SF" src="/Applications/Eclipse.app/Contents/Eclipse/plugins/com.google.guava_15.0.0.v201403281430.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.xtext.xbase.lib_2.9.0.v201507170721.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.xtend.lib_2.9.0.v201507170721.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.xtend.lib.macro_2.9.0.v201507170721.jar"/>
+            <fileset dir="${dir.jarfile}/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/japicmp-0.5.0-jar-with-dependencies.jar"/>
+        </jar>
+    </target>
+</project>

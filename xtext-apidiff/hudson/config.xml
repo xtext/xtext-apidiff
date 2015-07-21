@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>&lt;h3&gt;See output in &lt;a href=&quot;lastSuccessfulBuild/artifact/output/changes.html&quot;&gt;output/changes.html&lt;/a&gt;&lt;/h3&gt;</description>
+  <project-properties class="java.util.concurrent.ConcurrentHashMap">
+    <entry>
+      <string>hudson-plugins-disk_usage-DiskUsageProperty</string>
+      <base-property>
+        <originalValue class="hudson.plugins.disk_usage.DiskUsageProperty"/>
+        <propertyOverridden>false</propertyOverridden>
+      </base-property>
+    </entry>
+    <entry>
+      <string>parametersDefinitionProperties</string>
+      <copy-write-list-property>
+        <originalValue class="hudson.util.CopyOnWriteList">
+          <hudson.model.ParametersDefinitionProperty>
+            <parameterDefinitions>
+              <hudson.model.ChoiceParameterDefinition>
+                <name>OLD_VERSION</name>
+                <description></description>
+                <choices class="java.util.Arrays$ArrayList">
+                  <a class="string-array">
+                    <string>2.8.4</string>
+                    <string>2.8.3</string>
+                    <string>2.8.2</string>
+                  </a>
+                </choices>
+              </hudson.model.ChoiceParameterDefinition>
+              <hudson.model.ChoiceParameterDefinition>
+                <name>NEW_VERSION</name>
+                <description></description>
+                <choices class="java.util.Arrays$ArrayList">
+                  <a class="string-array">
+                    <string>2.9.0</string>
+                    <string>2.8.4</string>
+                    <string>2.8.3</string>
+                  </a>
+                </choices>
+              </hudson.model.ChoiceParameterDefinition>
+            </parameterDefinitions>
+          </hudson.model.ParametersDefinitionProperty>
+        </originalValue>
+        <propertyOverridden>false</propertyOverridden>
+      </copy-write-list-property>
+    </entry>
+    <entry>
+      <string>builders</string>
+      <describable-list-property>
+        <originalValue class="hudson.util.DescribableList">
+          <hudson.tasks.Shell>
+            <command>rm -rf output tmf-xtext-Update-2.8.4 tmf-xtext-Update-2.9.0
+
+if [ ! -f japicmp-ext.jar ];
+then
+   cp /shared/modeling/tmf/xtext/japicmp-ext.jar .
+fi
+
+if [ ! -d tmf-xtext-Update-2.8.2 ];
+then
+   wget -q &apos;download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.8.2/R201504100559/tmf-xtext-Update-2.8.2.zip&apos;
+   unzip -q tmf-xtext-Update-2.8.2.zip -d tmf-xtext-Update-2.8.2
+fi
+
+if [ ! -d tmf-xtext-Update-2.8.3 ];
+then
+   wget -q &apos;download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.8.3/R201506010551/tmf-xtext-Update-2.8.3.zip&apos;
+   unzip -q tmf-xtext-Update-2.8.3.zip -d tmf-xtext-Update-2.8.3
+fi
+
+if [ ! -d tmf-xtext-Update-2.8.4 ];
+then
+   wget -q &apos;https://hudson.eclipse.org/xtext/job/xtext-xtend-maintenance/lastSuccessfulBuild/artifact/build-result/p2.repository/plugins/*zip*/plugins.zip&apos;
+   unzip -q plugins.zip -d tmf-xtext-Update-2.8.4
+   rm plugins.zip
+fi
+
+
+if [ ! -d tmf-xtext-Update-2.9.0 ];
+then
+   wget -q &apos;https://hudson.eclipse.org/xtext/job/xtext-xtend/lastSuccessfulBuild/artifact/build-result/p2.repository/plugins/*zip*/plugins.zip&apos;
+   unzip -q plugins.zip -d tmf-xtext-Update-2.9.0
+   rm plugins.zip
+fi
+
+
+if [ ! -d eclipse ];
+then
+   wget -q &apos;http://download.eclipse.org/technology/epp/downloads/release/mars/RC3/eclipse-dsl-mars-RC3-linux-gtk-x86_64.tar.gz&apos;
+   tar -zxf eclipse-dsl-mars-RC3-linux-gtk-x86_64.tar.gz
+fi
+
+{
+	echo &quot;old.version=${OLD_VERSION}&quot;
+	echo &quot;new.version=${NEW_VERSION}&quot;
+	echo &quot;old.location=tmf-xtext-Update-${OLD_VERSION}/plugins/&quot;
+	echo &quot;new.location=tmf-xtext-Update-${NEW_VERSION}/plugins/&quot;
+	echo &quot;cpLocation=eclipse/plugins&quot;
+
+} &gt; japicmp.properties</command>
+          </hudson.tasks.Shell>
+          <hudson.tasks.Shell>
+            <command>$JAVA_HOME/bin/java -jar japicmp-ext.jar</command>
+          </hudson.tasks.Shell>
+        </originalValue>
+        <propertyOverridden>false</propertyOverridden>
+      </describable-list-property>
+    </entry>
+    <entry>
+      <string>jdk</string>
+      <string-property>
+        <originalValue class="string">JDK 1.8.0 Latest</originalValue>
+        <propertyOverridden>false</propertyOverridden>
+      </string-property>
+    </entry>
+    <entry>
+      <string>hudson-tasks-ArtifactArchiver</string>
+      <external-property>
+        <originalValue class="hudson.tasks.ArtifactArchiver">
+          <artifacts>output/**</artifacts>
+          <compressionType>GZIP</compressionType>
+          <latestOnly>false</latestOnly>
+          <autoValidateFileMask>false</autoValidateFileMask>
+        </originalValue>
+        <propertyOverridden>false</propertyOverridden>
+        <modified>true</modified>
+      </external-property>
+    </entry>
+    <entry>
+      <string>scm</string>
+      <scm-property>
+        <originalValue class="hudson.scm.NullSCM"/>
+        <propertyOverridden>false</propertyOverridden>
+      </scm-property>
+    </entry>
+    <entry>
+      <string>hudson-triggers-TimerTrigger</string>
+      <trigger-property>
+        <originalValue class="hudson.triggers.TimerTrigger">
+          <spec>@daily</spec>
+        </originalValue>
+        <propertyOverridden>false</propertyOverridden>
+      </trigger-property>
+    </entry>
+  </project-properties>
+  <keepDependencies>false</keepDependencies>
+  <createdBy>dennis.huebner@itemis.de</createdBy>
+  <creationTime>1434613669706</creationTime>
+  <properties>
+    <hudson.security.AuthorizationMatrixProperty>
+      <permission>hudson.model.Run.Delete:dennis.huebner@itemis.de</permission>
+      <permission>hudson.model.Item.Build:dennis.huebner@itemis.de</permission>
+      <permission>hudson.model.Item.Configure:dennis.huebner@itemis.de</permission>
+      <permission>hudson.model.Item.Delete:dennis.huebner@itemis.de</permission>
+      <permission>hudson.model.Item.Workspace:dennis.huebner@itemis.de</permission>
+      <permission>hudson.model.Run.Update:dennis.huebner@itemis.de</permission>
+      <permission>hudson.model.Item.Read:dennis.huebner@itemis.de</permission>
+    </hudson.security.AuthorizationMatrixProperty>
+  </properties>
+  <cascadingChildrenNames class="java.util.concurrent.CopyOnWriteArraySet"/>
+  <cascading-job-properties class="java.util.concurrent.CopyOnWriteArraySet">
+    <string>com-coravy-hudson-plugins-github-GithubProjectProperty</string>
+    <string>hudson-plugins-disk_usage-DiskUsageProperty</string>
+  </cascading-job-properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <cleanWorkspaceRequired>false</cleanWorkspaceRequired>
+  <builders/>
+  <publishers/>
+  <buildWrappers/>
+</project>
