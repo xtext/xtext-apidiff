@@ -1,0 +1,26 @@
+rm -rf output
+if [ ! -f japicmp-ext.jar ];
+then
+   cp /shared/modeling/tmf/xtext/japicmp-ext.jar .
+fi
+
+if [ ! -d tmf-xtext-Update-2.8.3 ];
+then
+   wget -q 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.8.3/R201506010551/tmf-xtext-Update-2.8.3.zip'
+   unzip -q tmf-xtext-Update-2.8.3.zip -d tmf-xtext-Update-2.8.3
+fi
+
+if [ ! -d eclipse ];
+then
+   wget -q 'http://download.eclipse.org/technology/epp/downloads/release/mars/RC3/eclipse-dsl-mars-RC3-linux-gtk-x86_64.tar.gz'
+   tar -zxf eclipse-dsl-mars-RC3-linux-gtk-x86_64.tar.gz
+fi
+
+{
+	echo "old.version=2.8.3"
+	echo "new.version=2.9.0"
+	echo "old.location=tmf-xtext-Update-2.8.3/plugins/"
+	echo "new.location=/home/hudson/genie.xtext/.hudson/jobs/xtext-xtend/lastSuccessful/archive/build-result/p2.repository/plugins/"
+	echo "cpLocation=eclipse/plugins"
+
+} > japicmp.properties
