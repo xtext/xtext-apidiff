@@ -1344,9 +1344,15 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       Optional<MemberValue> _newValue_1 = it.getNewValue();
       boolean _notEquals = (!Objects.equal("n.a.", _newValue_1));
       if (_notEquals) {
+        String _xifexpression_2 = null;
         Optional<MemberValue> _newValue_2 = it.getNewValue();
-        MemberValue _get_2 = _newValue_2.get();
-        _xifexpression_1 = _get_2.toString();
+        boolean _isPresent = _newValue_2.isPresent();
+        if (_isPresent) {
+          Optional<MemberValue> _newValue_3 = it.getNewValue();
+          MemberValue _get_2 = _newValue_3.get();
+          _xifexpression_2 = _get_2.toString();
+        }
+        _xifexpression_1 = _xifexpression_2;
       } else {
         Optional<MemberValue> _oldValue_1 = it.getOldValue();
         MemberValue _get_3 = _oldValue_1.get();

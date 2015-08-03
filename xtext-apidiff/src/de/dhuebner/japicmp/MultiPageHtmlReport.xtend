@@ -474,9 +474,10 @@ class MultiPageHtmlReport extends XmlOutputGenerator {
 		if (changeStatus == JApiChangeStatus.MODIFIED) {
 			'''<strike>«oldValue.get.toString»</strike>&nbsp;«newValue.get.toString»'''
 		} else {
-			if ("n.a." != newValue)
-				newValue.get.toString
-			else
+			if ("n.a." != newValue) {
+				if (newValue.present)
+					newValue.get.toString
+			} else
 				oldValue.get.toString
 		}
 	}
