@@ -398,7 +398,7 @@ class MultiPageHtmlReport extends XmlOutputGenerator {
 			</div>
 			
 			<div class="header">
-				<h1 class="title">Stistic of collected API changes</h1>
+				<h1 class="title">Statistics of collected API changes</h1>
 			</div>
 			<div class="contentContainer">
 			<div class="description">

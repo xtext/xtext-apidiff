@@ -1103,7 +1103,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.append("<div class=\"header\">");
     _builder.newLine();
     _builder.append("\t");
-    _builder.append("<h1 class=\"title\">Stistic of collected API changes</h1>");
+    _builder.append("<h1 class=\"title\">Statistics of collected API changes</h1>");
     _builder.newLine();
     _builder.append("</div>");
     _builder.newLine();
