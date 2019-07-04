@@ -1,3 +1,5 @@
 /output/
 /bin/
 /.DS_Store
+/.gradle/
+/build/

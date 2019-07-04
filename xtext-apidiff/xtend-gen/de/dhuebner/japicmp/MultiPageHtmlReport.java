@@ -19,22 +19,17 @@ import japicmp.model.JApiMethod;
 import japicmp.model.JApiModifier;
 import japicmp.model.JApiParameter;
 import japicmp.model.JApiReturnType;
-import japicmp.model.JApiSerialVersionUid;
 import japicmp.model.JApiSuperclass;
 import japicmp.output.xml.XmlOutputGenerator;
 import java.io.File;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javassist.CtClass;
-import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.MemberValue;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -73,61 +68,38 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       final File outputFolder = new File(_outputFolder);
       this.copyResources(outputFolder);
       final Function1<JApiClass, String> _function = (JApiClass it) -> {
-        Optional<CtClass> _newClass = it.getNewClass();
-        Optional<CtClass> _oldClass = it.getOldClass();
-        Optional<CtClass> _or = _newClass.or(_oldClass);
-        CtClass _get = _or.get();
-        return _get.getPackageName();
+        return it.getNewClass().or(it.getOldClass()).get().getPackageName();
       };
       final Map<String, List<JApiClass>> byPackage = IterableExtensions.<String, JApiClass>groupBy(this.jApiClasses, _function);
       String _plus = (outputFolder + "/changes.html");
-      PrintWriter _printWriter = new PrintWriter(_plus);
-      CharSequence _createStartPage = this.createStartPage();
-      PrintWriter _append = _printWriter.append(_createStartPage);
-      _append.close();
+      new PrintWriter(_plus).append(this.createStartPage()).close();
       String _plus_1 = (outputFolder + "/package-overview.html");
-      PrintWriter _printWriter_1 = new PrintWriter(_plus_1);
       final Function1<JApiClass, Boolean> _function_1 = (JApiClass it) -> {
         JApiChangeStatus _changeStatus = it.getChangeStatus();
         return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.MODIFIED));
       };
-      CharSequence _createMenu = this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.OVERVIEW, _function_1);
-      PrintWriter _append_1 = _printWriter_1.append(_createMenu);
-      _append_1.close();
+      new PrintWriter(_plus_1).append(this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.OVERVIEW, _function_1)).close();
       String _plus_2 = (outputFolder + "/removed-overview.html");
-      PrintWriter _printWriter_2 = new PrintWriter(_plus_2);
       final Function1<JApiClass, Boolean> _function_2 = (JApiClass it) -> {
         JApiChangeStatus _changeStatus = it.getChangeStatus();
         return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.REMOVED));
       };
-      CharSequence _createMenu_1 = this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.REMOVED, _function_2);
-      PrintWriter _append_2 = _printWriter_2.append(_createMenu_1);
-      _append_2.close();
+      new PrintWriter(_plus_2).append(this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.REMOVED, _function_2)).close();
       String _plus_3 = (outputFolder + "/added-overview.html");
-      PrintWriter _printWriter_3 = new PrintWriter(_plus_3);
       final Function1<JApiClass, Boolean> _function_3 = (JApiClass it) -> {
         JApiChangeStatus _changeStatus = it.getChangeStatus();
         return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.NEW));
       };
-      CharSequence _createMenu_2 = this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.ADDED, _function_3);
-      PrintWriter _append_3 = _printWriter_3.append(_createMenu_2);
-      _append_3.close();
+      new PrintWriter(_plus_3).append(this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.ADDED, _function_3)).close();
       String _plus_4 = (outputFolder + "/breaking-overview.html");
-      PrintWriter _printWriter_4 = new PrintWriter(_plus_4);
       final Function1<JApiClass, Boolean> _function_4 = (JApiClass it) -> {
         boolean _isBinaryCompatible = it.isBinaryCompatible();
         return Boolean.valueOf((!_isBinaryCompatible));
       };
-      CharSequence _createMenu_3 = this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.BREAKING, _function_4);
-      PrintWriter _append_4 = _printWriter_4.append(_createMenu_3);
-      _append_4.close();
+      new PrintWriter(_plus_4).append(this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.BREAKING, _function_4)).close();
       String _plus_5 = (outputFolder + "/statistics.html");
-      PrintWriter _printWriter_5 = new PrintWriter(_plus_5);
-      CharSequence _createStatistics = this.createStatistics(byPackage);
-      PrintWriter _append_5 = _printWriter_5.append(_createStatistics);
-      _append_5.close();
-      File _file = new File(outputFolder, "packages");
-      _file.mkdirs();
+      new PrintWriter(_plus_5).append(this.createStatistics(byPackage)).close();
+      new File(outputFolder, "packages").mkdirs();
       Set<String> _keySet = byPackage.keySet();
       for (final String packageName : _keySet) {
         {
@@ -135,9 +107,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           String _plus_7 = (_plus_6 + packageName);
           String _plus_8 = (_plus_7 + ".html");
           final PrintWriter writer = new PrintWriter(_plus_8);
-          CharSequence _createPackageSiteContent = this.createPackageSiteContent(packageName, byPackage);
-          PrintWriter _append_6 = writer.append(_createPackageSiteContent);
-          _append_6.close();
+          writer.append(this.createPackageSiteContent(packageName, byPackage)).close();
         }
       }
       return null;
@@ -162,12 +132,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
   
   public long copyResourceUsingClassloder(final File destFolder, final String fileName) {
     try {
-      Class<? extends MultiPageHtmlReport> _class = this.getClass();
-      ClassLoader _classLoader = _class.getClassLoader();
-      InputStream _resourceAsStream = _classLoader.getResourceAsStream(("html/" + fileName));
-      File _file = new File(destFolder, fileName);
-      Path _path = _file.toPath();
-      return Files.copy(_resourceAsStream, _path, 
+      return Files.copy(this.getClass().getClassLoader().getResourceAsStream(("html/" + fileName)), new File(destFolder, fileName).toPath(), 
         StandardCopyOption.REPLACE_EXISTING);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
@@ -184,7 +149,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.newLine();
     _builder.append("<TITLE>");
     String _documentationName = this.info.getDocumentationName();
-    _builder.append(_documentationName, "");
+    _builder.append(_documentationName);
     _builder.append("</TITLE>");
     _builder.newLineIfNotEmpty();
     _builder.append("</HEAD>");
@@ -229,11 +194,11 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       _builder.newLine();
       _builder.append("<title>Overview (");
       String _documentationName = this.info.getDocumentationName();
-      _builder.append(_documentationName, "");
+      _builder.append(_documentationName);
       _builder.append(")</title>");
       _builder.newLineIfNotEmpty();
       _builder.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
-      _builder.append(depth, "");
+      _builder.append(depth);
       _builder.append("resources/stylesheet.css\" title=\"Style\">");
       _builder.newLineIfNotEmpty();
       _builder.append("</head>");
@@ -347,8 +312,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
         Set<String> _keySet = byPackage.keySet();
         for(final String packageName : _keySet) {
           _builder.append("\t");
-          List<JApiClass> _get = byPackage.get(packageName);
-          final Iterable<JApiClass> removed = IterableExtensions.<JApiClass>filter(_get, ((Function1<? super JApiClass, Boolean>)filter));
+          final Iterable<JApiClass> removed = IterableExtensions.<JApiClass>filter(byPackage.get(packageName), ((Function1<? super JApiClass, Boolean>)filter));
           _builder.newLineIfNotEmpty();
           {
             int _size = IterableExtensions.size(removed);
@@ -434,24 +398,20 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           _builder.newLine();
           _builder.append("<td class=\"colFirst colStatus col");
           JApiChangeStatus _changeStatus = clazzReport.getChangeStatus();
-          _builder.append(_changeStatus, "");
+          _builder.append(_changeStatus);
           _builder.append("\">");
           String _changeStatusLabel = this.<JApiClass>changeStatusLabel(clazzReport);
-          _builder.append(_changeStatusLabel, "");
+          _builder.append(_changeStatusLabel);
           _builder.append("</td>");
           _builder.newLineIfNotEmpty();
           _builder.append("<td class=\"colLast\"><a href=\"#");
           String _fullyQualifiedName = clazzReport.getFullyQualifiedName();
-          _builder.append(_fullyQualifiedName, "");
+          _builder.append(_fullyQualifiedName);
           _builder.append("_summary\" title=\"class in ");
-          _builder.append(packageName, "");
+          _builder.append(packageName);
           _builder.append("\">");
-          Optional<CtClass> _newClass = clazzReport.getNewClass();
-          Optional<CtClass> _oldClass = clazzReport.getOldClass();
-          Optional<CtClass> _or = _newClass.or(_oldClass);
-          CtClass _get_1 = _or.get();
-          String _simpleName = _get_1.getSimpleName();
-          _builder.append(_simpleName, "");
+          String _simpleName = clazzReport.getNewClass().or(clazzReport.getOldClass()).get().getSimpleName();
+          _builder.append(_simpleName);
           _builder.append("</a></td>");
           _builder.newLineIfNotEmpty();
           _builder.append("</tr>");
@@ -464,12 +424,9 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       _builder.newLine();
       _builder.newLine();
       {
-        List<JApiClass> _get_2 = byPackage.get(packageName);
-        for(final JApiClass clazzReport_1 : _get_2) {
-          Optional<CtClass> _newClass_1 = clazzReport_1.getNewClass();
-          Optional<CtClass> _oldClass_1 = clazzReport_1.getOldClass();
-          Optional<CtClass> _or_1 = _newClass_1.or(_oldClass_1);
-          final CtClass clazz = _or_1.get();
+        List<JApiClass> _get_1 = byPackage.get(packageName);
+        for(final JApiClass clazzReport_1 : _get_1) {
+          final CtClass clazz = clazzReport_1.getNewClass().or(clazzReport_1.getOldClass()).get();
           _builder.newLineIfNotEmpty();
           _builder.append("<ul class=\"blockList\">");
           _builder.newLine();
@@ -477,36 +434,30 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           _builder.newLine();
           _builder.append("<h2 title=\"Class ");
           String _simpleName_1 = clazz.getSimpleName();
-          _builder.append(_simpleName_1, "");
+          _builder.append(_simpleName_1);
           _builder.append("\" class=\"title\">Class ");
           String _simpleName_2 = clazz.getSimpleName();
-          _builder.append(_simpleName_2, "");
+          _builder.append(_simpleName_2);
           _builder.append(" (");
-          JApiChangeStatus _changeStatus_1 = clazzReport_1.getChangeStatus();
-          String _string = _changeStatus_1.toString();
-          String _lowerCase = _string.toLowerCase();
-          _builder.append(_lowerCase, "");
+          String _lowerCase = clazzReport_1.getChangeStatus().toString().toLowerCase();
+          _builder.append(_lowerCase);
           _builder.append(")</h2>");
           _builder.newLineIfNotEmpty();
           {
-            JApiSerialVersionUid _serialVersionUid = clazzReport_1.getSerialVersionUid();
-            String _serialVersionUidDefaultOldAsString = _serialVersionUid.getSerialVersionUidDefaultOldAsString();
-            JApiSerialVersionUid _serialVersionUid_1 = clazzReport_1.getSerialVersionUid();
-            String _serialVersionUidDefaultNewAsString = _serialVersionUid_1.getSerialVersionUidDefaultNewAsString();
+            String _serialVersionUidDefaultOldAsString = clazzReport_1.getSerialVersionUid().getSerialVersionUidDefaultOldAsString();
+            String _serialVersionUidDefaultNewAsString = clazzReport_1.getSerialVersionUid().getSerialVersionUidDefaultNewAsString();
             boolean _notEquals = (!Objects.equal(_serialVersionUidDefaultOldAsString, _serialVersionUidDefaultNewAsString));
             if (_notEquals) {
               _builder.append("<h3><font color=\"red\">(Serializable incompatible(!): default serialVersionUID changed)</font></h3>");
               _builder.newLine();
               _builder.append("Old value: ");
-              JApiSerialVersionUid _serialVersionUid_2 = clazzReport_1.getSerialVersionUid();
-              String _serialVersionUidDefaultOldAsString_1 = _serialVersionUid_2.getSerialVersionUidDefaultOldAsString();
-              _builder.append(_serialVersionUidDefaultOldAsString_1, "");
+              String _serialVersionUidDefaultOldAsString_1 = clazzReport_1.getSerialVersionUid().getSerialVersionUidDefaultOldAsString();
+              _builder.append(_serialVersionUidDefaultOldAsString_1);
               _builder.append("<br/>");
               _builder.newLineIfNotEmpty();
               _builder.append("New value: ");
-              JApiSerialVersionUid _serialVersionUid_3 = clazzReport_1.getSerialVersionUid();
-              String _serialVersionUidDefaultNewAsString_1 = _serialVersionUid_3.getSerialVersionUidDefaultNewAsString();
-              _builder.append(_serialVersionUidDefaultNewAsString_1, "");
+              String _serialVersionUidDefaultNewAsString_1 = clazzReport_1.getSerialVersionUid().getSerialVersionUidDefaultNewAsString();
+              _builder.append(_serialVersionUidDefaultNewAsString_1);
               _builder.append("<br/>");
               _builder.newLineIfNotEmpty();
             }
@@ -515,12 +466,11 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           _builder.newLine();
           _builder.append("<a name=\"");
           String _fullyQualifiedName_1 = clazzReport_1.getFullyQualifiedName();
-          _builder.append(_fullyQualifiedName_1, "");
+          _builder.append(_fullyQualifiedName_1);
           _builder.append("_summary\">");
           _builder.newLineIfNotEmpty();
           {
-            List<JApiAnnotation> _annotations = clazzReport_1.getAnnotations();
-            boolean _isEmpty = _annotations.isEmpty();
+            boolean _isEmpty = clazzReport_1.getAnnotations().isEmpty();
             boolean _not = (!_isEmpty);
             if (_not) {
               _builder.append("<!-- ======== annotations SUMMARY ======== -->");
@@ -558,15 +508,15 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.append("</tr>");
               _builder.newLine();
               {
-                List<JApiAnnotation> _annotations_1 = clazzReport_1.getAnnotations();
-                for(final JApiAnnotation annoChange : _annotations_1) {
+                List<JApiAnnotation> _annotations = clazzReport_1.getAnnotations();
+                for(final JApiAnnotation annoChange : _annotations) {
                   _builder.append("\t");
                   _builder.append("<tr class=\"rowColor\">");
                   _builder.newLine();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst colStatus col");
-                  JApiChangeStatus _changeStatus_2 = annoChange.getChangeStatus();
-                  _builder.append(_changeStatus_2, "\t");
+                  JApiChangeStatus _changeStatus_1 = annoChange.getChangeStatus();
+                  _builder.append(_changeStatus_1, "\t");
                   _builder.append("\">");
                   String _changeStatusLabel_1 = this.<JApiAnnotation>changeStatusLabel(annoChange);
                   _builder.append(_changeStatusLabel_1, "\t");
@@ -580,11 +530,10 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
                   _builder.append("<td class=\"colLast\"><code>");
-                  List<JApiAnnotationElement> _elements = annoChange.getElements();
                   final Function1<JApiAnnotationElement, CharSequence> _function_1 = (JApiAnnotationElement it) -> {
                     return this.toHtml(it);
                   };
-                  String _join = IterableExtensions.<JApiAnnotationElement>join(_elements, ", ", _function_1);
+                  String _join = IterableExtensions.<JApiAnnotationElement>join(annoChange.getElements(), ", ", _function_1);
                   _builder.append(_join, "\t");
                   _builder.append("</code>&nbsp;</td>");
                   _builder.newLineIfNotEmpty();
@@ -604,8 +553,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
             }
           }
           {
-            List<JApiImplementedInterface> _interfaces = clazzReport_1.getInterfaces();
-            boolean _isEmpty_1 = _interfaces.isEmpty();
+            boolean _isEmpty_1 = clazzReport_1.getInterfaces().isEmpty();
             boolean _not_1 = (!_isEmpty_1);
             if (_not_1) {
               _builder.append("<!-- ======== interfaces SUMMARY ======== -->");
@@ -640,15 +588,15 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.append("</tr>");
               _builder.newLine();
               {
-                List<JApiImplementedInterface> _interfaces_1 = clazzReport_1.getInterfaces();
-                for(final JApiImplementedInterface annoChange_1 : _interfaces_1) {
+                List<JApiImplementedInterface> _interfaces = clazzReport_1.getInterfaces();
+                for(final JApiImplementedInterface annoChange_1 : _interfaces) {
                   _builder.append("\t");
                   _builder.append("<tr class=\"rowColor\">");
                   _builder.newLine();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst colStatus col");
-                  JApiChangeStatus _changeStatus_3 = annoChange_1.getChangeStatus();
-                  _builder.append(_changeStatus_3, "\t");
+                  JApiChangeStatus _changeStatus_2 = annoChange_1.getChangeStatus();
+                  _builder.append(_changeStatus_2, "\t");
                   _builder.append("\">");
                   String _changeStatusLabel_2 = this.<JApiImplementedInterface>changeStatusLabel(annoChange_1);
                   _builder.append(_changeStatusLabel_2, "\t");
@@ -676,9 +624,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
             }
           }
           {
-            JApiSuperclass _superclass = clazzReport_1.getSuperclass();
-            JApiChangeStatus _changeStatus_4 = _superclass.getChangeStatus();
-            boolean _notEquals_1 = (!Objects.equal(_changeStatus_4, JApiChangeStatus.UNCHANGED));
+            JApiChangeStatus _changeStatus_3 = clazzReport_1.getSuperclass().getChangeStatus();
+            boolean _notEquals_1 = (!Objects.equal(_changeStatus_3, JApiChangeStatus.UNCHANGED));
             if (_notEquals_1) {
               _builder.append("<!-- ======== superclass SUMMARY ======== -->");
               _builder.newLine();
@@ -710,24 +657,17 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.newLine();
               _builder.append("\t\t");
               _builder.append("<td class=\"colFirst colStatus col");
-              JApiSuperclass _superclass_1 = clazzReport_1.getSuperclass();
-              JApiChangeStatus _changeStatus_5 = _superclass_1.getChangeStatus();
-              _builder.append(_changeStatus_5, "\t\t");
+              JApiChangeStatus _changeStatus_4 = clazzReport_1.getSuperclass().getChangeStatus();
+              _builder.append(_changeStatus_4, "\t\t");
               _builder.append("\">");
-              JApiSuperclass _superclass_2 = clazzReport_1.getSuperclass();
-              String _changeStatusLabel_3 = this.<JApiSuperclass>changeStatusLabel(_superclass_2);
+              String _changeStatusLabel_3 = this.<JApiSuperclass>changeStatusLabel(clazzReport_1.getSuperclass());
               _builder.append(_changeStatusLabel_3, "\t\t");
               _builder.append("</code></td>");
               _builder.newLineIfNotEmpty();
               _builder.append("\t\t");
               _builder.append("<td class=\"colLast\"><code>");
-              JApiSuperclass _superclass_3 = clazzReport_1.getSuperclass();
-              Optional<String> _newSuperclass = _superclass_3.getNewSuperclass();
-              JApiSuperclass _superclass_4 = clazzReport_1.getSuperclass();
-              Optional<String> _oldSuperclass = _superclass_4.getOldSuperclass();
-              Optional<String> _or_2 = _newSuperclass.or(_oldSuperclass);
-              String _get_3 = _or_2.get();
-              _builder.append(_get_3, "\t\t");
+              String _get_2 = clazzReport_1.getSuperclass().getNewSuperclass().or(clazzReport_1.getSuperclass().getOldSuperclass()).get();
+              _builder.append(_get_2, "\t\t");
               _builder.append("</code></td>");
               _builder.newLineIfNotEmpty();
               _builder.append("\t");
@@ -744,8 +684,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
             }
           }
           {
-            List<JApiField> _fields = clazzReport_1.getFields();
-            boolean _isEmpty_2 = _fields.isEmpty();
+            boolean _isEmpty_2 = clazzReport_1.getFields().isEmpty();
             boolean _not_2 = (!_isEmpty_2);
             if (_not_2) {
               _builder.append("<!-- ======== FIELDS SUMMARY ======== -->");
@@ -783,15 +722,15 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.append("</tr>");
               _builder.newLine();
               {
-                List<JApiField> _fields_1 = clazzReport_1.getFields();
-                for(final JApiField fieldChange : _fields_1) {
+                List<JApiField> _fields = clazzReport_1.getFields();
+                for(final JApiField fieldChange : _fields) {
                   _builder.append("\t");
                   _builder.append("<tr class=\"rowColor\">");
                   _builder.newLine();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst colStatus col");
-                  JApiChangeStatus _changeStatus_6 = fieldChange.getChangeStatus();
-                  _builder.append(_changeStatus_6, "\t");
+                  JApiChangeStatus _changeStatus_5 = fieldChange.getChangeStatus();
+                  _builder.append(_changeStatus_5, "\t");
                   _builder.append("\">");
                   String _changeStatusLabel_4 = this.<JApiField>changeStatusLabel(fieldChange);
                   _builder.append(_changeStatusLabel_4, "\t");
@@ -799,8 +738,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst\"><code>");
-                  JApiModifier<AccessModifier> _accessModifier = fieldChange.getAccessModifier();
-                  CharSequence _html = this.toHtml(_accessModifier);
+                  CharSequence _html = this.toHtml(fieldChange.getAccessModifier());
                   _builder.append(_html, "\t");
                   _builder.append(" </code></td>");
                   _builder.newLineIfNotEmpty();
@@ -826,8 +764,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
             }
           }
           {
-            List<JApiConstructor> _constructors = clazzReport_1.getConstructors();
-            boolean _isEmpty_3 = _constructors.isEmpty();
+            boolean _isEmpty_3 = clazzReport_1.getConstructors().isEmpty();
             boolean _not_3 = (!_isEmpty_3);
             if (_not_3) {
               _builder.append("<!-- ======== CONSTRUCTOR SUMMARY ======== -->");
@@ -865,15 +802,15 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.append("</tr>");
               _builder.newLine();
               {
-                List<JApiConstructor> _constructors_1 = clazzReport_1.getConstructors();
-                for(final JApiConstructor constructorChange : _constructors_1) {
+                List<JApiConstructor> _constructors = clazzReport_1.getConstructors();
+                for(final JApiConstructor constructorChange : _constructors) {
                   _builder.append("\t");
                   _builder.append("<tr class=\"rowColor\">");
                   _builder.newLine();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst colStatus col");
-                  JApiChangeStatus _changeStatus_7 = constructorChange.getChangeStatus();
-                  _builder.append(_changeStatus_7, "\t");
+                  JApiChangeStatus _changeStatus_6 = constructorChange.getChangeStatus();
+                  _builder.append(_changeStatus_6, "\t");
                   _builder.append("\">");
                   String _changeStatusLabel_5 = this.<JApiConstructor>changeStatusLabel(constructorChange);
                   _builder.append(_changeStatusLabel_5, "\t");
@@ -881,8 +818,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst\"><code>");
-                  JApiModifier<AccessModifier> _accessModifier_1 = constructorChange.getAccessModifier();
-                  CharSequence _html_1 = this.toHtml(_accessModifier_1);
+                  CharSequence _html_1 = this.toHtml(constructorChange.getAccessModifier());
                   _builder.append(_html_1, "\t");
                   _builder.append(" </code></td>");
                   _builder.newLineIfNotEmpty();
@@ -891,11 +827,10 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   String _name_1 = constructorChange.getName();
                   _builder.append(_name_1, "\t");
                   _builder.append("</strong>(");
-                  List<JApiParameter> _parameters = constructorChange.getParameters();
                   final Function1<JApiParameter, CharSequence> _function_2 = (JApiParameter it) -> {
                     return this.toHtml(it);
                   };
-                  String _join_1 = IterableExtensions.<JApiParameter>join(_parameters, ", ", _function_2);
+                  String _join_1 = IterableExtensions.<JApiParameter>join(constructorChange.getParameters(), ", ", _function_2);
                   _builder.append(_join_1, "\t");
                   _builder.append(")</code>&nbsp;</td>");
                   _builder.newLineIfNotEmpty();
@@ -915,8 +850,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
             }
           }
           {
-            List<JApiMethod> _methods = clazzReport_1.getMethods();
-            boolean _isEmpty_4 = _methods.isEmpty();
+            boolean _isEmpty_4 = clazzReport_1.getMethods().isEmpty();
             boolean _not_4 = (!_isEmpty_4);
             if (_not_4) {
               _builder.append("<!-- ========== METHOD SUMMARY =========== -->");
@@ -954,15 +888,15 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.append("</tr>");
               _builder.newLine();
               {
-                List<JApiMethod> _methods_1 = clazzReport_1.getMethods();
-                for(final JApiMethod methodeChange : _methods_1) {
+                List<JApiMethod> _methods = clazzReport_1.getMethods();
+                for(final JApiMethod methodeChange : _methods) {
                   _builder.append("\t");
                   _builder.append("<tr class=\"rowColor\">");
                   _builder.newLine();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst colStatus col");
-                  JApiChangeStatus _changeStatus_8 = methodeChange.getChangeStatus();
-                  _builder.append(_changeStatus_8, "\t");
+                  JApiChangeStatus _changeStatus_7 = methodeChange.getChangeStatus();
+                  _builder.append(_changeStatus_7, "\t");
                   _builder.append("\">");
                   String _changeStatusLabel_6 = this.<JApiMethod>changeStatusLabel(methodeChange);
                   _builder.append(_changeStatusLabel_6, "\t");
@@ -970,12 +904,10 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
                   _builder.append("<td class=\"colFirst\"><code><strong>");
-                  JApiModifier<AccessModifier> _accessModifier_2 = methodeChange.getAccessModifier();
-                  CharSequence _html_2 = this.toHtml(_accessModifier_2);
+                  CharSequence _html_2 = this.toHtml(methodeChange.getAccessModifier());
                   _builder.append(_html_2, "\t");
                   _builder.append("</strong> ");
-                  JApiReturnType _returnType = methodeChange.getReturnType();
-                  CharSequence _html_3 = this.toHtml(_returnType);
+                  CharSequence _html_3 = this.toHtml(methodeChange.getReturnType());
                   _builder.append(_html_3, "\t");
                   _builder.append("</code></td>");
                   _builder.newLineIfNotEmpty();
@@ -988,27 +920,24 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   String _name_2 = methodeChange.getName();
                   _builder.append(_name_2, "\t\t");
                   _builder.append("</strong>(");
-                  List<JApiParameter> _parameters_1 = methodeChange.getParameters();
                   final Function1<JApiParameter, CharSequence> _function_3 = (JApiParameter it) -> {
                     return this.toHtml(it);
                   };
-                  String _join_2 = IterableExtensions.<JApiParameter>join(_parameters_1, ", ", _function_3);
+                  String _join_2 = IterableExtensions.<JApiParameter>join(methodeChange.getParameters(), ", ", _function_3);
                   _builder.append(_join_2, "\t\t");
                   _builder.append(")</code>&nbsp;");
                   _builder.newLineIfNotEmpty();
                   {
-                    List<JApiAnnotation> _annotations_2 = methodeChange.getAnnotations();
-                    boolean _isEmpty_5 = _annotations_2.isEmpty();
+                    boolean _isEmpty_5 = methodeChange.getAnnotations().isEmpty();
                     boolean _not_5 = (!_isEmpty_5);
                     if (_not_5) {
                       _builder.append("\t");
                       _builder.append("\t");
                       _builder.append("- annotations: \t");
-                      List<JApiAnnotation> _annotations_3 = methodeChange.getAnnotations();
                       final Function1<JApiAnnotation, CharSequence> _function_4 = (JApiAnnotation it) -> {
                         return this.toHtml(it);
                       };
-                      String _join_3 = IterableExtensions.<JApiAnnotation>join(_annotations_3, ", ", _function_4);
+                      String _join_3 = IterableExtensions.<JApiAnnotation>join(methodeChange.getAnnotations(), ", ", _function_4);
                       _builder.append(_join_3, "\t\t");
                       _builder.newLineIfNotEmpty();
                     }
@@ -1069,7 +998,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.newLine();
     _builder.append("<title>Statistics (");
     String _documentationName = this.info.getDocumentationName();
-    _builder.append(_documentationName, "");
+    _builder.append(_documentationName);
     _builder.append(")</title>");
     _builder.newLineIfNotEmpty();
     _builder.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"resources/stylesheet.css\" title=\"Style\">");
@@ -1111,8 +1040,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.newLine();
     _builder.append("<div class=\"description\">");
     _builder.newLine();
-    Collection<List<JApiClass>> _values = byPackage.values();
-    final Iterable<JApiClass> allClasses = Iterables.<JApiClass>concat(_values);
+    final Iterable<JApiClass> allClasses = Iterables.<JApiClass>concat(byPackage.values());
     _builder.newLineIfNotEmpty();
     _builder.append("<ul class=\"blocklist\">");
     _builder.newLine();
@@ -1123,16 +1051,15 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.append("<dt>Packages changed:</dt>");
     _builder.newLine();
     _builder.append("<dd>");
-    Set<String> _keySet = byPackage.keySet();
-    int _size = _keySet.size();
-    _builder.append(_size, "");
+    int _size = byPackage.keySet().size();
+    _builder.append(_size);
     _builder.append("</dd>");
     _builder.newLineIfNotEmpty();
     _builder.append("<dt>Classes changed:</dt>");
     _builder.newLine();
     _builder.append("<dd>");
     int _size_1 = IterableExtensions.size(allClasses);
-    _builder.append(_size_1, "");
+    _builder.append(_size_1);
     _builder.append("</dd>");
     _builder.newLineIfNotEmpty();
     _builder.append("<dt>Binary incompatible changes:</dt>");
@@ -1142,9 +1069,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       boolean _isBinaryCompatible = it.isBinaryCompatible();
       return Boolean.valueOf((!_isBinaryCompatible));
     };
-    Iterable<JApiClass> _filter = IterableExtensions.<JApiClass>filter(allClasses, _function);
-    int _size_2 = IterableExtensions.size(_filter);
-    _builder.append(_size_2, "");
+    int _size_2 = IterableExtensions.size(IterableExtensions.<JApiClass>filter(allClasses, _function));
+    _builder.append(_size_2);
     _builder.append("</dd>");
     _builder.newLineIfNotEmpty();
     _builder.append("<dt>Classes added:</dt>");
@@ -1154,9 +1080,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       JApiChangeStatus _changeStatus = it.getChangeStatus();
       return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.NEW));
     };
-    Iterable<JApiClass> _filter_1 = IterableExtensions.<JApiClass>filter(allClasses, _function_1);
-    int _size_3 = IterableExtensions.size(_filter_1);
-    _builder.append(_size_3, "");
+    int _size_3 = IterableExtensions.size(IterableExtensions.<JApiClass>filter(allClasses, _function_1));
+    _builder.append(_size_3);
     _builder.append("</dd>");
     _builder.newLineIfNotEmpty();
     _builder.append("<dt>Classes removed:</dt>");
@@ -1166,9 +1091,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       JApiChangeStatus _changeStatus = it.getChangeStatus();
       return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.REMOVED));
     };
-    Iterable<JApiClass> _filter_2 = IterableExtensions.<JApiClass>filter(allClasses, _function_2);
-    int _size_4 = IterableExtensions.size(_filter_2);
-    _builder.append(_size_4, "");
+    int _size_4 = IterableExtensions.size(IterableExtensions.<JApiClass>filter(allClasses, _function_2));
+    _builder.append(_size_4);
     _builder.append("</dd>");
     _builder.newLineIfNotEmpty();
     _builder.append("</dl>");
@@ -1197,11 +1121,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
   }
   
   public String toStatusLable(final JApiClass clazz) {
-    Optional<CtClass> _newClass = clazz.getNewClass();
-    Optional<CtClass> _oldClass = clazz.getOldClass();
-    Optional<CtClass> _or = _newClass.or(_oldClass);
-    CtClass _get = _or.get();
-    String lable = _get.getSimpleName();
+    String lable = clazz.getNewClass().or(clazz.getOldClass()).get().getSimpleName();
     boolean _isBinaryCompatible = clazz.isBinaryCompatible();
     boolean _not = (!_isBinaryCompatible);
     if (_not) {
@@ -1217,28 +1137,17 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     if (_equals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike>");
-      Optional<AccessModifier> _oldModifier = modifier.getOldModifier();
-      AccessModifier _get = _oldModifier.get();
-      String _string = _get.toString();
-      String _lowerCase = _string.toLowerCase();
-      _builder.append(_lowerCase, "");
+      String _lowerCase = modifier.getOldModifier().get().toString().toLowerCase();
+      _builder.append(_lowerCase);
       _builder.append("</strike>&nbsp;");
-      Optional<AccessModifier> _newModifier = modifier.getNewModifier();
-      AccessModifier _get_1 = _newModifier.get();
-      String _string_1 = _get_1.toString();
-      String _lowerCase_1 = _string_1.toLowerCase();
-      _builder.append(_lowerCase_1, "");
+      String _lowerCase_1 = modifier.getNewModifier().get().toString().toLowerCase();
+      _builder.append(_lowerCase_1);
       _xifexpression = _builder;
     } else {
       StringConcatenation _builder_1 = new StringConcatenation();
       _builder_1.append("<code>");
-      Optional<AccessModifier> _newModifier_1 = modifier.getNewModifier();
-      Optional<AccessModifier> _oldModifier_1 = modifier.getOldModifier();
-      Optional<AccessModifier> _or = _newModifier_1.or(_oldModifier_1);
-      AccessModifier _get_2 = _or.get();
-      String _string_2 = _get_2.toString();
-      String _lowerCase_2 = _string_2.toLowerCase();
-      _builder_1.append(_lowerCase_2, "");
+      String _lowerCase_2 = modifier.getNewModifier().or(modifier.getOldModifier()).get().toString().toLowerCase();
+      _builder_1.append(_lowerCase_2);
       _builder_1.append("</code>");
       _xifexpression = _builder_1;
     }
@@ -1249,11 +1158,10 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<span title=\"");
     String _type = param.getType();
-    _builder.append(_type, "");
+    _builder.append(_type);
     _builder.append("\">");
-    String _type_1 = param.getType();
-    String _cutQualifier = this.cutQualifier(_type_1);
-    _builder.append(_cutQualifier, "");
+    String _cutQualifier = this.cutQualifier(param.getType());
+    _builder.append(_cutQualifier);
     _builder.append("</span>");
     return _builder;
   }
@@ -1266,46 +1174,42 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike title=\"");
       String _oldReturnType = retType.getOldReturnType();
-      _builder.append(_oldReturnType, "");
+      _builder.append(_oldReturnType);
       _builder.append("\">");
       _builder.newLineIfNotEmpty();
       _builder.append("\t\t\t");
-      String _oldReturnType_1 = retType.getOldReturnType();
-      String _cutQualifier = this.cutQualifier(_oldReturnType_1);
+      String _cutQualifier = this.cutQualifier(retType.getOldReturnType());
       _builder.append(_cutQualifier, "\t\t\t");
       _builder.append("</strike>&nbsp;<span title=\"");
       String _newReturnType = retType.getNewReturnType();
       _builder.append(_newReturnType, "\t\t\t");
       _builder.append("\">");
-      String _newReturnType_1 = retType.getNewReturnType();
-      String _cutQualifier_1 = this.cutQualifier(_newReturnType_1);
+      String _cutQualifier_1 = this.cutQualifier(retType.getNewReturnType());
       _builder.append(_cutQualifier_1, "\t\t\t");
       _builder.append("</span>");
       _xifexpression = _builder;
     } else {
       CharSequence _xifexpression_1 = null;
-      String _newReturnType_2 = retType.getNewReturnType();
-      boolean _notEquals = (!Objects.equal("n.a.", _newReturnType_2));
+      String _newReturnType_1 = retType.getNewReturnType();
+      boolean _notEquals = (!Objects.equal("n.a.", _newReturnType_1));
       if (_notEquals) {
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append("<span title=\"");
-        String _newReturnType_3 = retType.getNewReturnType();
-        _builder_1.append(_newReturnType_3, "");
+        String _newReturnType_2 = retType.getNewReturnType();
+        _builder_1.append(_newReturnType_2);
         _builder_1.append("\">");
-        String _newReturnType_4 = retType.getNewReturnType();
-        String _cutQualifier_2 = this.cutQualifier(_newReturnType_4);
-        _builder_1.append(_cutQualifier_2, "");
+        String _cutQualifier_2 = this.cutQualifier(retType.getNewReturnType());
+        _builder_1.append(_cutQualifier_2);
         _builder_1.append("</span>");
         _xifexpression_1 = _builder_1;
       } else {
         StringConcatenation _builder_2 = new StringConcatenation();
         _builder_2.append("<span title=\"");
-        String _oldReturnType_2 = retType.getOldReturnType();
-        _builder_2.append(_oldReturnType_2, "");
+        String _oldReturnType_1 = retType.getOldReturnType();
+        _builder_2.append(_oldReturnType_1);
         _builder_2.append("\">");
-        String _oldReturnType_3 = retType.getOldReturnType();
-        String _cutQualifier_3 = this.cutQualifier(_oldReturnType_3);
-        _builder_2.append(_cutQualifier_3, "");
+        String _cutQualifier_3 = this.cutQualifier(retType.getOldReturnType());
+        _builder_2.append(_cutQualifier_3);
         _builder_2.append("</span>");
         _xifexpression_1 = _builder_2;
       }
@@ -1329,34 +1233,25 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     if (_equals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike>");
-      Optional<MemberValue> _oldValue = it.getOldValue();
-      MemberValue _get = _oldValue.get();
-      String _string = _get.toString();
-      _builder.append(_string, "");
+      String _string = it.getOldValue().get().toString();
+      _builder.append(_string);
       _builder.append("</strike>&nbsp;");
-      Optional<MemberValue> _newValue = it.getNewValue();
-      MemberValue _get_1 = _newValue.get();
-      String _string_1 = _get_1.toString();
-      _builder.append(_string_1, "");
+      String _string_1 = it.getNewValue().get().toString();
+      _builder.append(_string_1);
       _xifexpression = _builder;
     } else {
       String _xifexpression_1 = null;
-      Optional<MemberValue> _newValue_1 = it.getNewValue();
-      boolean _notEquals = (!Objects.equal("n.a.", _newValue_1));
+      Optional<MemberValue> _newValue = it.getNewValue();
+      boolean _notEquals = (!Objects.equal("n.a.", _newValue));
       if (_notEquals) {
         String _xifexpression_2 = null;
-        Optional<MemberValue> _newValue_2 = it.getNewValue();
-        boolean _isPresent = _newValue_2.isPresent();
+        boolean _isPresent = it.getNewValue().isPresent();
         if (_isPresent) {
-          Optional<MemberValue> _newValue_3 = it.getNewValue();
-          MemberValue _get_2 = _newValue_3.get();
-          _xifexpression_2 = _get_2.toString();
+          _xifexpression_2 = it.getNewValue().get().toString();
         }
         _xifexpression_1 = _xifexpression_2;
       } else {
-        Optional<MemberValue> _oldValue_1 = it.getOldValue();
-        MemberValue _get_3 = _oldValue_1.get();
-        _xifexpression_1 = _get_3.toString();
+        _xifexpression_1 = it.getOldValue().get().toString();
       }
       _xifexpression = _xifexpression_1;
     }
@@ -1370,29 +1265,20 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     if (_equals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike>");
-      Optional<Annotation> _oldAnnotation = it.getOldAnnotation();
-      Annotation _get = _oldAnnotation.get();
-      String _typeName = _get.getTypeName();
-      _builder.append(_typeName, "");
+      String _typeName = it.getOldAnnotation().get().getTypeName();
+      _builder.append(_typeName);
       _builder.append("</strike>&nbsp;");
-      Optional<Annotation> _newAnnotation = it.getNewAnnotation();
-      Annotation _get_1 = _newAnnotation.get();
-      String _typeName_1 = _get_1.getTypeName();
-      _builder.append(_typeName_1, "");
+      String _typeName_1 = it.getNewAnnotation().get().getTypeName();
+      _builder.append(_typeName_1);
       _xifexpression = _builder;
     } else {
       String _xifexpression_1 = null;
-      Optional<Annotation> _newAnnotation_1 = it.getNewAnnotation();
-      boolean _isPresent = _newAnnotation_1.isPresent();
+      boolean _isPresent = it.getNewAnnotation().isPresent();
       if (_isPresent) {
-        Optional<Annotation> _newAnnotation_2 = it.getNewAnnotation();
-        Annotation _get_2 = _newAnnotation_2.get();
-        String _typeName_2 = _get_2.getTypeName();
+        String _typeName_2 = it.getNewAnnotation().get().getTypeName();
         _xifexpression_1 = ("<font color=\'green\'>added</font> @" + _typeName_2);
       } else {
-        Optional<Annotation> _oldAnnotation_1 = it.getOldAnnotation();
-        Annotation _get_3 = _oldAnnotation_1.get();
-        String _typeName_3 = _get_3.getTypeName();
+        String _typeName_3 = it.getOldAnnotation().get().getTypeName();
         _xifexpression_1 = ("<font color=\'red\'>removed</font> @" + _typeName_3);
       }
       _xifexpression = _xifexpression_1;
