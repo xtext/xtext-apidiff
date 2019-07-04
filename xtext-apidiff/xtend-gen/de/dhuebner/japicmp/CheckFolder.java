@@ -1,6 +1,5 @@
 package de.dhuebner.japicmp;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import de.dhuebner.japicmp.FolderComparator;
 import io.airlift.airline.SingleCommand;
@@ -31,8 +30,8 @@ public class CheckFolder {
       final String from = properties.getProperty("old.version");
       final String to = properties.getProperty("new.version");
       String _property = properties.getProperty("docuName");
-      boolean _equals = Objects.equal(_property, null);
-      if (_equals) {
+      boolean _tripleEquals = (_property == null);
+      if (_tripleEquals) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Xtext API Changes (");
         _builder.append(from);
@@ -42,8 +41,8 @@ public class CheckFolder {
         properties.setProperty("docuName", _builder.toString());
       }
       String _property_1 = properties.getProperty("old.location");
-      boolean _equals_1 = Objects.equal(_property_1, null);
-      if (_equals_1) {
+      boolean _tripleEquals_1 = (_property_1 == null);
+      if (_tripleEquals_1) {
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append("tmf-xtext-Update-");
         _builder_1.append(from);
@@ -51,8 +50,8 @@ public class CheckFolder {
         properties.setProperty("old.location", _builder_1.toString());
       }
       String _property_2 = properties.getProperty("new.location");
-      boolean _equals_2 = Objects.equal(_property_2, null);
-      if (_equals_2) {
+      boolean _tripleEquals_2 = (_property_2 == null);
+      if (_tripleEquals_2) {
         StringConcatenation _builder_2 = new StringConcatenation();
         _builder_2.append("tmf-xtext-Update-");
         _builder_2.append(to);
@@ -60,15 +59,15 @@ public class CheckFolder {
         properties.setProperty("new.location", _builder_2.toString());
       }
       String _property_3 = properties.getProperty("xmlOutputFile");
-      boolean _equals_3 = Objects.equal(_property_3, null);
-      if (_equals_3) {
+      boolean _tripleEquals_3 = (_property_3 == null);
+      if (_tripleEquals_3) {
         String _property_4 = properties.getProperty("htmlOutputFolder");
         String _plus = (_property_4 + "/report.xml");
         properties.setProperty("xmlOutputFile", _plus);
       }
       String _property_5 = properties.getProperty("htmlOutputFile");
-      boolean _equals_4 = Objects.equal(_property_5, null);
-      if (_equals_4) {
+      boolean _tripleEquals_4 = (_property_5 == null);
+      if (_tripleEquals_4) {
         String _property_6 = properties.getProperty("htmlOutputFolder");
         String _plus_1 = (_property_6 + "/plain-report.html");
         properties.setProperty("htmlOutputFile", _plus_1);
@@ -95,13 +94,11 @@ public class CheckFolder {
   
   private static Options createOptions(final JApiCli.Compare it, final Properties properties) {
     Options options = new Options();
-    boolean _notEquals = (!Objects.equal(it.pathToNewVersionJar, null));
-    if (_notEquals) {
+    if ((it.pathToNewVersionJar != null)) {
       File _file = new File(it.pathToNewVersionJar);
       options.setNewArchive(_file);
     }
-    boolean _notEquals_1 = (!Objects.equal(it.pathToOldVersionJar, null));
-    if (_notEquals_1) {
+    if ((it.pathToOldVersionJar != null)) {
       File _file_1 = new File(it.pathToOldVersionJar);
       options.setOldArchive(_file_1);
     }
