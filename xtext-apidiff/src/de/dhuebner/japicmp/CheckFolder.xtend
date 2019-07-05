@@ -23,19 +23,19 @@ class CheckFolder {
 
 		val from = properties.getProperty("old.version")
 		val to = properties.getProperty("new.version")
-		if (properties.getProperty("docuName") == null) {
+		if (properties.getProperty("docuName") === null) {
 			properties.setProperty("docuName", '''Xtext API Changes («from» - «to»)''')
 		}
-		if (properties.getProperty("old.location") == null) {
+		if (properties.getProperty("old.location") === null) {
 			properties.setProperty("old.location", '''tmf-xtext-Update-«from»/plugins''')
 		}
-		if (properties.getProperty("new.location") == null) {
+		if (properties.getProperty("new.location") === null) {
 			properties.setProperty("new.location", '''tmf-xtext-Update-«to»/plugins''')
 		}
-		if (properties.getProperty("xmlOutputFile") == null) {
+		if (properties.getProperty("xmlOutputFile") === null) {
 			properties.setProperty("xmlOutputFile", properties.getProperty("htmlOutputFolder") + "/report.xml")
 		}
-		if (properties.getProperty("htmlOutputFile") == null) {
+		if (properties.getProperty("htmlOutputFile") === null) {
 			properties.setProperty("htmlOutputFile", properties.getProperty("htmlOutputFolder") + "/plain-report.html")
 		}
 		val options = createOptions(cmd, properties)
@@ -57,9 +57,9 @@ class CheckFolder {
 
 	def private static Options createOptions(JApiCli.Compare it, Properties properties) {
 		var Options options = new Options()
-		if (pathToNewVersionJar != null)
+		if (pathToNewVersionJar !== null)
 			options.setNewArchive(new File(pathToNewVersionJar))
-		if (pathToOldVersionJar != null) {
+		if (pathToOldVersionJar !== null) {
 			options.setOldArchive(new File(pathToOldVersionJar))
 		}
 		options.setXmlOutputFile(Optional.fromNullable(pathToXmlOutputFile))

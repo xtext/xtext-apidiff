@@ -12,8 +12,6 @@ import japicmp.model.JApiClass;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
@@ -50,18 +48,7 @@ public class FolderComparator {
         String _property_2 = properties.getProperty("cpLocation");
         final File cpFolder = new File(_property_2);
         final FileFilter _function = (File it) -> {
-          boolean _and = false;
-          String _name = it.getName();
-          boolean _endsWith = _name.endsWith(".jar");
-          if (!_endsWith) {
-            _and = false;
-          } else {
-            String _name_1 = it.getName();
-            String _property_3 = properties.getProperty("checkOnlyJarsStartWith");
-            boolean _startsWith = _name_1.startsWith(_property_3);
-            _and = _startsWith;
-          }
-          return _and;
+          return (it.getName().endsWith(".jar") && it.getName().startsWith(properties.getProperty("checkOnlyJarsStartWith")));
         };
         final FileFilter xtextFilter = _function;
         String _property_3 = properties.getProperty("htmlOutputFolder");
@@ -70,21 +57,15 @@ public class FolderComparator {
         final Stopwatch watch = Stopwatch.createStarted();
         InputOutput.<String>println("Compare Started");
         final JarArchiveComparatorOptions comparatorOptions = JarArchiveComparatorOptions.of(options);
-        FileSystem _default = FileSystems.getDefault();
-        String _absolutePath = cpFolder.getAbsolutePath();
-        Path _path = _default.getPath(_absolutePath);
+        Path _path = FileSystems.getDefault().getPath(cpFolder.getAbsolutePath());
         EnumSet<FileVisitOption> _noneOf = EnumSet.<FileVisitOption>noneOf(FileVisitOption.class);
         Files.walkFileTree(_path, _noneOf, 3, 
           new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-              Path _fileName = file.getFileName();
-              String _string = _fileName.toString();
-              boolean _endsWith = _string.endsWith(".jar");
+              boolean _endsWith = file.getFileName().toString().endsWith(".jar");
               if (_endsWith) {
-                List<String> _classPathEntries = comparatorOptions.getClassPathEntries();
-                String _string_1 = file.toString();
-                _classPathEntries.add(_string_1);
+                comparatorOptions.getClassPathEntries().add(file.toString());
               }
               return super.visitFile(file, attrs);
             }
@@ -96,15 +77,11 @@ public class FolderComparator {
         List<CtClass> newClasses = Lists.<CtClass>newArrayList();
         File[] _listFiles = oldVersion.listFiles(xtextFilter);
         for (final File file : _listFiles) {
-          ClassPool _classPool = jarArchiveComparator.getClassPool();
-          List<CtClass> _createListOfCtClasses = this.createListOfCtClasses(file, _classPool, comparatorOptions);
-          oldClasses.addAll(_createListOfCtClasses);
+          oldClasses.addAll(this.createListOfCtClasses(file, jarArchiveComparator.getClassPool(), comparatorOptions));
         }
         File[] _listFiles_1 = newVersion.listFiles(xtextFilter);
         for (final File file_1 : _listFiles_1) {
-          ClassPool _classPool_1 = jarArchiveComparator.getClassPool();
-          List<CtClass> _createListOfCtClasses_1 = this.createListOfCtClasses(file_1, _classPool_1, comparatorOptions);
-          newClasses.addAll(_createListOfCtClasses_1);
+          newClasses.addAll(this.createListOfCtClasses(file_1, jarArchiveComparator.getClassPool(), comparatorOptions));
         }
         int _size = oldClasses.size();
         String _plus_1 = ("Old version classes: " + Integer.valueOf(_size));
@@ -122,18 +99,16 @@ public class FolderComparator {
         InputOutput.<String>println(_plus_5);
         ReporterInformation _reporterInformation = new ReporterInformation();
         final Procedure1<ReporterInformation> _function_1 = (ReporterInformation it) -> {
-          String _property_4 = properties.getProperty("docuName");
-          it.setDocumentationName(_property_4);
-          String _absolutePath_1 = outputFolder.getAbsolutePath();
-          it.setOutputFolder(_absolutePath_1);
+          it.setDocumentationName(properties.getProperty("docuName"));
+          it.setOutputFolder(outputFolder.getAbsolutePath());
         };
         final ReporterInformation info = ObjectExtensions.<ReporterInformation>operator_doubleArrow(_reporterInformation, _function_1);
-        String _absolutePath_1 = oldVersion.getAbsolutePath();
-        String _absolutePath_2 = newVersion.getAbsolutePath();
-        MultiPageHtmlReport htmlGenerator = new MultiPageHtmlReport(info, _absolutePath_1, _absolutePath_2, compareResult, options);
+        String _absolutePath = oldVersion.getAbsolutePath();
+        String _absolutePath_1 = newVersion.getAbsolutePath();
+        MultiPageHtmlReport htmlGenerator = new MultiPageHtmlReport(info, _absolutePath, _absolutePath_1, compareResult, options);
         htmlGenerator.generate();
-        String _absolutePath_3 = outputFolder.getAbsolutePath();
-        String _plus_6 = ("Output in: " + _absolutePath_3);
+        String _absolutePath_2 = outputFolder.getAbsolutePath();
+        String _plus_6 = ("Output in: " + _absolutePath_2);
         InputOutput.<String>println(_plus_6);
         String _plus_7 = (watch + " Finished...");
         _xblockexpression = InputOutput.<String>println(_plus_7);
@@ -157,14 +132,11 @@ public class FolderComparator {
           if (_endsWith) {
             CtClass ctClass = null;
             try {
-              InputStream _inputStream = jarFile.getInputStream(jarEntry);
-              CtClass _makeClass = classPool.makeClass(_inputStream);
-              ctClass = _makeClass;
+              ctClass = classPool.makeClass(jarFile.getInputStream(jarEntry));
             } catch (final Throwable _t) {
               if (_t instanceof Exception) {
                 final Exception e = (Exception)_t;
-                String _message = e.getMessage();
-                String _format = String.format("Failed to load file from jar \'%s\' as class file: %s.", name, _message);
+                String _format = String.format("Failed to load file from jar \'%s\' as class file: %s.", name, e.getMessage());
                 throw new JApiCmpException(JApiCmpException.Reason.IoException, _format, e);
               } else {
                 throw Exceptions.sneakyThrow(_t);
@@ -178,9 +150,7 @@ public class FolderComparator {
     } catch (final Throwable _t) {
       if (_t instanceof IOException) {
         final IOException e = (IOException)_t;
-        String _absolutePath = archive.getAbsolutePath();
-        String _message = e.getMessage();
-        String _format = String.format("Processing of jar file %s failed: %s", _absolutePath, _message);
+        String _format = String.format("Processing of jar file %s failed: %s", archive.getAbsolutePath(), e.getMessage());
         throw new JApiCmpException(JApiCmpException.Reason.IoException, _format, e);
       } else {
         throw Exceptions.sneakyThrow(_t);

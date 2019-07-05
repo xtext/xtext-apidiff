@@ -1,6 +1,5 @@
 package de.dhuebner.japicmp;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import de.dhuebner.japicmp.FolderComparator;
 import io.airlift.airline.SingleCommand;
@@ -31,44 +30,44 @@ public class CheckFolder {
       final String from = properties.getProperty("old.version");
       final String to = properties.getProperty("new.version");
       String _property = properties.getProperty("docuName");
-      boolean _equals = Objects.equal(_property, null);
-      if (_equals) {
+      boolean _tripleEquals = (_property == null);
+      if (_tripleEquals) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Xtext API Changes (");
-        _builder.append(from, "");
+        _builder.append(from);
         _builder.append(" - ");
-        _builder.append(to, "");
+        _builder.append(to);
         _builder.append(")");
         properties.setProperty("docuName", _builder.toString());
       }
       String _property_1 = properties.getProperty("old.location");
-      boolean _equals_1 = Objects.equal(_property_1, null);
-      if (_equals_1) {
+      boolean _tripleEquals_1 = (_property_1 == null);
+      if (_tripleEquals_1) {
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append("tmf-xtext-Update-");
-        _builder_1.append(from, "");
+        _builder_1.append(from);
         _builder_1.append("/plugins");
         properties.setProperty("old.location", _builder_1.toString());
       }
       String _property_2 = properties.getProperty("new.location");
-      boolean _equals_2 = Objects.equal(_property_2, null);
-      if (_equals_2) {
+      boolean _tripleEquals_2 = (_property_2 == null);
+      if (_tripleEquals_2) {
         StringConcatenation _builder_2 = new StringConcatenation();
         _builder_2.append("tmf-xtext-Update-");
-        _builder_2.append(to, "");
+        _builder_2.append(to);
         _builder_2.append("/plugins");
         properties.setProperty("new.location", _builder_2.toString());
       }
       String _property_3 = properties.getProperty("xmlOutputFile");
-      boolean _equals_3 = Objects.equal(_property_3, null);
-      if (_equals_3) {
+      boolean _tripleEquals_3 = (_property_3 == null);
+      if (_tripleEquals_3) {
         String _property_4 = properties.getProperty("htmlOutputFolder");
         String _plus = (_property_4 + "/report.xml");
         properties.setProperty("xmlOutputFile", _plus);
       }
       String _property_5 = properties.getProperty("htmlOutputFile");
-      boolean _equals_4 = Objects.equal(_property_5, null);
-      if (_equals_4) {
+      boolean _tripleEquals_4 = (_property_5 == null);
+      if (_tripleEquals_4) {
         String _property_6 = properties.getProperty("htmlOutputFolder");
         String _plus_1 = (_property_6 + "/plain-report.html");
         properties.setProperty("htmlOutputFile", _plus_1);
@@ -95,47 +94,34 @@ public class CheckFolder {
   
   private static Options createOptions(final JApiCli.Compare it, final Properties properties) {
     Options options = new Options();
-    boolean _notEquals = (!Objects.equal(it.pathToNewVersionJar, null));
-    if (_notEquals) {
+    if ((it.pathToNewVersionJar != null)) {
       File _file = new File(it.pathToNewVersionJar);
       options.setNewArchive(_file);
     }
-    boolean _notEquals_1 = (!Objects.equal(it.pathToOldVersionJar, null));
-    if (_notEquals_1) {
+    if ((it.pathToOldVersionJar != null)) {
       File _file_1 = new File(it.pathToOldVersionJar);
       options.setOldArchive(_file_1);
     }
-    Optional<String> _fromNullable = Optional.<String>fromNullable(it.pathToXmlOutputFile);
-    options.setXmlOutputFile(_fromNullable);
-    Optional<String> _fromNullable_1 = Optional.<String>fromNullable(it.pathToHtmlOutputFile);
-    options.setHtmlOutputFile(_fromNullable_1);
+    options.setXmlOutputFile(Optional.<String>fromNullable(it.pathToXmlOutputFile));
+    options.setHtmlOutputFile(Optional.<String>fromNullable(it.pathToHtmlOutputFile));
     options.setOutputOnlyModifications(true);
-    Optional<AccessModifier> _modifier = CheckFolder.toModifier(it.accessModifier);
-    options.setAccessModifier(_modifier);
-    Optional<String> _fromNullable_2 = Optional.<String>fromNullable(it.includes);
-    options.addIncludeFromArgument(_fromNullable_2);
-    Optional<String> _fromNullable_3 = Optional.<String>fromNullable(it.excludes);
-    options.addExcludeFromArgument(_fromNullable_3);
+    options.setAccessModifier(CheckFolder.toModifier(it.accessModifier));
+    options.addIncludeFromArgument(Optional.<String>fromNullable(it.includes));
+    options.addExcludeFromArgument(Optional.<String>fromNullable(it.excludes));
     options.setOutputOnlyBinaryIncompatibleModifications(it.onlyBinaryIncompatibleModifications);
     options.setIncludeSynthetic(it.includeSynthetic);
     final String packageExclude = properties.getProperty("package.exclude");
     final String packageInclude = properties.getProperty("package.include");
     String[] _split = packageExclude.split(",");
     for (final String pattern : _split) {
-      Optional<String> _of = Optional.<String>of(pattern);
-      options.addExcludeFromArgument(_of);
+      options.addExcludeFromArgument(Optional.<String>of(pattern));
     }
     String[] _split_1 = packageInclude.split(",");
     for (final String pattern_1 : _split_1) {
-      Optional<String> _of_1 = Optional.<String>of(pattern_1);
-      options.addIncludeFromArgument(_of_1);
+      options.addIncludeFromArgument(Optional.<String>of(pattern_1));
     }
-    String _property = properties.getProperty("xmlOutputFile");
-    Optional<String> _of_2 = Optional.<String>of(_property);
-    options.setXmlOutputFile(_of_2);
-    String _property_1 = properties.getProperty("htmlOutputFile");
-    Optional<String> _of_3 = Optional.<String>of(_property_1);
-    options.setHtmlOutputFile(_of_3);
+    options.setXmlOutputFile(Optional.<String>of(properties.getProperty("xmlOutputFile")));
+    options.setHtmlOutputFile(Optional.<String>of(properties.getProperty("htmlOutputFile")));
     return options;
   }
   
@@ -144,15 +130,11 @@ public class CheckFolder {
     boolean _isPresent = stringOptional.isPresent();
     if (_isPresent) {
       try {
-        String _get = stringOptional.get();
-        String _upperCase = _get.toUpperCase();
-        AccessModifier _valueOf = AccessModifier.valueOf(_upperCase);
-        return Optional.<AccessModifier>of(_valueOf);
+        return Optional.<AccessModifier>of(AccessModifier.valueOf(stringOptional.get().toUpperCase()));
       } catch (final Throwable _t) {
         if (_t instanceof IllegalArgumentException) {
-          final IllegalArgumentException e = (IllegalArgumentException)_t;
-          String _listOfAccessModifier = AccessModifier.listOfAccessModifier();
-          String _format = String.format("Invalid value for option -a: %s. Possible values are: %s.", accessModifierArg, _listOfAccessModifier);
+          String _format = String.format("Invalid value for option -a: %s. Possible values are: %s.", accessModifierArg, 
+            AccessModifier.listOfAccessModifier());
           throw new JApiCmpException(JApiCmpException.Reason.CliError, _format);
         } else {
           throw Exceptions.sneakyThrow(_t);
