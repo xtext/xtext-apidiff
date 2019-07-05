@@ -39,3 +39,7 @@ sourceSets {
 		resources.srcDirs = []
 	}
 }
+
+shadowJar {
+	archiveName = "japicmp-ext.jar"
+}
