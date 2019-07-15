@@ -68,7 +68,7 @@ then
 fi
 echo "Downloading Xtext 2.19.0"
 # TODO make this better and faster. am not sure if we can guess the nightly number. or ....
-wget -q --output-document=tmf-xtext-Update-2.19.0.zip 'https://ci-staging.eclipse.org/xtext/job/releng/job/sign-and-deploy/lastSuccessfulBuild/artifact/build-result/p2.repository/*zip*/p2.repository.zip' 
+wget -q --output-document=tmf-xtext-Update-2.19.0.zip 'https://ci-staging.eclipse.org/xtext/job/releng/job/sign-and-deploy/lastSuccessfulBuild/artifact/publishing/build-result/p2.repository/*zip*/p2.repository.zip'
 unzip -q tmf-xtext-Update-2.19.0.zip
 # i really dislike this
 mv p2.repository tmf-xtext-Update-2.19.0
