@@ -64,9 +64,8 @@ then
 fi
 echo "Downloading Xtext 2.19.0"
 # TODO make this better and faster. am not sure if we can guess the nightly number. or ....
-curl -m 600 -sL 'https://ci-staging.eclipse.org/xtext/job/releng/job/sign-and-deploy/lastSuccessfulBuild/artifact/publishing/build-result/p2.repository/*zip*/p2.repository.zip' --output 'tmf-xtext-Update-2.19.0.zip' && unzip -q tmf-xtext-Update-2.19.0.zip
-# i really dislike this
-mv p2.repository tmf-xtext-Update-2.19.0
+# ideally download official nightly
+curl -m 600 --retry 5 -sL 'https://ci.eclipse.org/xtext/job/xtext-umbrella/job/master/lastStableBuild/artifact/build/org.eclipse.xtext.sdk.p2-repository-2.19.0-SNAPSHOT.zip' --output 'tmf-xtext-Update-2.19.0.zip' && unzip -q tmf-xtext-Update-2.19.0.zip -d tmf-xtext-Update-2.19.0
 rm tmf-xtext-Update-2.19.0.zip
 
 # update apicmp.properties
