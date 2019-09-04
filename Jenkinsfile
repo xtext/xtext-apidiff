@@ -87,8 +87,8 @@ spec:
   }
   
   parameters {
-    choice(name: 'OLD_VERSION', choices: ['2.18.0', '2.17.1', '2.17.0'], description: 'Old Version')
-    choice(name: 'NEW_VERSION', choices: ['2.19.0', '2.18.0', '2.17.1', '2.17.0'], description: 'New Version')
+    choice(name: 'OLD_VERSION', choices: ['2.19.0', '2.18.0', '2.17.1', '2.17.0'], description: 'Old Version')
+    choice(name: 'NEW_VERSION', choices: ['2.20.0', '2.19.0', '2.18.0', '2.17.1', '2.17.0'], description: 'New Version')
   }
 
   stages {
