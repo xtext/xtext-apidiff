@@ -26,8 +26,8 @@ if [ ! -d eclipse ];
 then
    echo "Downloading Eclipse"
    # Get basic Eclipse SDK
-   curl -m 600 -sL 'http://download.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/eclipse-SDK-4.12-linux-gtk-x86_64.tar.gz' --output 'eclipse-SDK-4.12-linux-gtk-x86_64.tar.gz' && tar -zxf eclipse-SDK-4.12-linux-gtk-x86_64.tar.gz
-   rm eclipse-SDK-4.12-linux-gtk-x86_64.tar.gz
+   curl -m 1200 -sL 'http://download.eclipse.org/eclipse/downloads/drops4/R-4.13-201909161045/eclipse-SDK-4.13-linux-gtk-x86_64.tar.gz' --output 'eclipse-SDK-4.13-linux-gtk-x86_64.tar.gz' && tar -zxf eclipse-SDK-4.13-linux-gtk-x86_64.tar.gz
+   rm eclipse-SDK-4.13-linux-gtk-x86_64.tar.gz
    # Install additional features: Xtext and dependent
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
@@ -40,28 +40,28 @@ fi
 if [ ! -d tmf-xtext-Update-2.17.0 ];
 then
    echo "Downloading Xtext 2.17.0"
-   curl -m 600 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.17.0/R201903041445/tmf-xtext-Update-2.17.0.zip' --output 'tmf-xtext-Update-2.17.0.zip' && unzip -q tmf-xtext-Update-2.17.0.zip -d tmf-xtext-Update-2.17.0
+   curl -m 1200 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.17.0/R201903041445/tmf-xtext-Update-2.17.0.zip' --output 'tmf-xtext-Update-2.17.0.zip' && unzip -q tmf-xtext-Update-2.17.0.zip -d tmf-xtext-Update-2.17.0
    rm tmf-xtext-Update-2.17.0.zip
 fi
 
 if [ ! -d tmf-xtext-Update-2.17.1 ];
 then
    echo "Downloading Xtext 2.17.1"
-   curl -m 600 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.17.1/R201904030733/tmf-xtext-Update-2.17.1.zip' --output 'tmf-xtext-Update-2.17.1.zip' && unzip -q tmf-xtext-Update-2.17.1.zip -d tmf-xtext-Update-2.17.1
+   curl -m 1200 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.17.1/R201904030733/tmf-xtext-Update-2.17.1.zip' --output 'tmf-xtext-Update-2.17.1.zip' && unzip -q tmf-xtext-Update-2.17.1.zip -d tmf-xtext-Update-2.17.1
    rm tmf-xtext-Update-2.17.1.zip
 fi
 
 if [ ! -d tmf-xtext-Update-2.18.0 ];
 then
    echo "Downloading Xtext 2.18.0"
-   curl -m 600 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.18.0/R201906031516/tmf-xtext-Update-2.18.0.zip' --output 'tmf-xtext-Update-2.18.0.zip' && unzip -q tmf-xtext-Update-2.18.0.zip -d tmf-xtext-Update-2.18.0
+   curl -m 1200 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.18.0/R201906031516/tmf-xtext-Update-2.18.0.zip' --output 'tmf-xtext-Update-2.18.0.zip' && unzip -q tmf-xtext-Update-2.18.0.zip -d tmf-xtext-Update-2.18.0
    rm tmf-xtext-Update-2.18.0.zip
 fi
 
 if [ ! -d tmf-xtext-Update-2.19.0 ];
 then
    echo "Downloading Xtext 2.19.0"
-   curl -m 600 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.19.0/R201909021322/tmf-xtext-Update-2.19.0.zip' --output 'tmf-xtext-Update-2.19.0.zip' && unzip -q tmf-xtext-Update-2.19.0.zip -d tmf-xtext-Update-2.19.0
+   curl -m 1200 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.19.0/R201909021322/tmf-xtext-Update-2.19.0.zip' --output 'tmf-xtext-Update-2.19.0.zip' && unzip -q tmf-xtext-Update-2.19.0.zip -d tmf-xtext-Update-2.19.0
    rm tmf-xtext-Update-2.19.0.zip
 fi
 
@@ -72,7 +72,7 @@ fi
 echo "Downloading Xtext 2.20.0"
 # TODO make this better and faster. am not sure if we can guess the nightly number. or ....
 # ideally download official nightly
-curl -m 600 --retry 5 -sL 'https://ci.eclipse.org/xtext/job/xtext-umbrella/job/master/lastStableBuild/artifact/build/org.eclipse.xtext.sdk.p2-repository-2.20.0-SNAPSHOT.zip' --output 'tmf-xtext-Update-2.20.0.zip' && unzip -q tmf-xtext-Update-2.20.0.zip -d tmf-xtext-Update-2.20.0
+curl -m 1200 --retry 5 -sL 'https://ci.eclipse.org/xtext/job/xtext-umbrella/job/master/lastStableBuild/artifact/build/org.eclipse.xtext.sdk.p2-repository-2.20.0-SNAPSHOT.zip' --output 'tmf-xtext-Update-2.20.0.zip' && unzip -q tmf-xtext-Update-2.20.0.zip -d tmf-xtext-Update-2.20.0
 rm tmf-xtext-Update-2.20.0.zip
 
 # update apicmp.properties
