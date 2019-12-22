@@ -33,7 +33,7 @@ then
    -application org.eclipse.equinox.p2.director \
    -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0/,http://download.eclipse.org/releases/2019-12,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2019-12 \
    -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0/,http://download.eclipse.org/releases/2019-12,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2019-12 \
-   -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.kohsuke.args4j \
+   -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j \
    -destination eclipse
 fi
 
