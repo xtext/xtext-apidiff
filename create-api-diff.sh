@@ -6,12 +6,12 @@ cd ..
 
 if [ -z "$NEW_VERSION" ]; then
   # if not set in environment use default
-  NEW_VERSION=2.21.0
+  NEW_VERSION=2.22.0
 fi
 
 if [ -z "$OLD_VERSION" ]; then
   # if not set in environment use default
-  OLD_VERSION=2.20.0
+  OLD_VERSION=2.21.0
 fi
 
 echo "Diffing $NEW_VERSION against $OLD_VERSION"
@@ -31,8 +31,8 @@ then
    # Install additional features: Xtext and dependent
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
-   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0/,http://download.eclipse.org/releases/2019-12,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2019-12 \
-   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0/,http://download.eclipse.org/releases/2019-12,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2019-12 \
+   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.21.0/,http://download.eclipse.org/releases/2020-03,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2020-03 \
+   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.21.0/,http://download.eclipse.org/releases/2020-03,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2020-03 \
    -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j \
    -destination eclipse
 fi
@@ -72,15 +72,22 @@ then
    rm tmf-xtext-Update-2.20.0.zip
 fi
 
-if [ -d tmf-xtext-Update-2.21.0 ];
+if [ ! -d tmf-xtext-Update-2.21.0 ];
 then
-  rm -r tmf-xtext-Update-2.21.0
+   echo "Downloading Xtext 2.21.0"
+   curl -m 1200 -sL 'download.eclipse.org/modeling/tmf/xtext/downloads/drops/2.21.0/R202003021509/tmf-xtext-Update-2.21.0.zip' --output 'tmf-xtext-Update-2.21.0.zip' && unzip -q tmf-xtext-Update-2.21.0.zip -d tmf-xtext-Update-2.21.0
+   rm tmf-xtext-Update-2.21.0.zip
 fi
-echo "Downloading Xtext 2.21.0"
+
+if [ -d tmf-xtext-Update-2.22.0 ];
+then
+  rm -r tmf-xtext-Update-2.22.0
+fi
+echo "Downloading Xtext 2.22.0"
 # TODO make this better and faster. am not sure if we can guess the nightly number. or ....
 # ideally download official nightly
-curl -m 1200 --retry 5 -sL 'https://ci.eclipse.org/xtext/job/xtext-umbrella/job/master/lastStableBuild/artifact/build/org.eclipse.xtext.sdk.p2-repository-2.21.0-SNAPSHOT.zip' --output 'tmf-xtext-Update-2.21.0.zip' && unzip -q tmf-xtext-Update-2.21.0.zip -d tmf-xtext-Update-2.21.0
-rm tmf-xtext-Update-2.21.0.zip
+curl -m 1200 --retry 5 -sL 'https://ci.eclipse.org/xtext/job/xtext-umbrella/job/master/lastStableBuild/artifact/build/org.eclipse.xtext.sdk.p2-repository-2.22.0-SNAPSHOT.zip' --output 'tmf-xtext-Update-2.22.0.zip' && unzip -q tmf-xtext-Update-2.22.0.zip -d tmf-xtext-Update-2.22.0
+rm tmf-xtext-Update-2.22.0.zip
 
 # update apicmp.properties
 {
