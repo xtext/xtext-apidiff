@@ -31,8 +31,8 @@ then
    # Install additional features: Xtext and dependent
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
-   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.24.0/,http://download.eclipse.org/releases/2020-09,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2020-09 \
-   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.24.0/,http://download.eclipse.org/releases/2020-09,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2020-09 \
+   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.24.0/,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.12.0/,http://download.eclipse.org/releases/2020-09,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2020-09 \
+   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.24.0/,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.12.0/,http://download.eclipse.org/releases/2020-09,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/2020-09 \
    -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j \
    -destination eclipse
 fi
