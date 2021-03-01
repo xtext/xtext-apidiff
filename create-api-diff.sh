@@ -6,12 +6,12 @@ cd ..
 
 if [ -z "$NEW_VERSION" ]; then
   # if not set in environment use default
-  NEW_VERSION=2.25.0
+  NEW_VERSION=2.26.0
 fi
 
 if [ -z "$OLD_VERSION" ]; then
   # if not set in environment use default
-  OLD_VERSION=2.24.0
+  OLD_VERSION=2.25.0
 fi
 
 echo "Diffing $NEW_VERSION against $OLD_VERSION"
