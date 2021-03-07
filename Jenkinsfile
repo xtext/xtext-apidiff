@@ -1,7 +1,33 @@
 pipeline {
   agent {
     kubernetes {
-      label 'centos-7'
+      label 'xtext-xtend-api-diff'
+      defaultContainer 'jnlp'
+      yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: jnlp
+    image: 'eclipsecbi/jenkins-jnlp-agent'
+    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+    resources:
+      limits:
+        memory: "3.5Gi"
+        cpu: "1.0"
+      requests:
+        memory: "3.5Gi"
+        cpu: "1.0"
+    volumeMounts:
+    - name: gradle
+      mountPath: /home/jenkins/.gradle
+  volumes:
+  - name: volume-known-hosts
+    configMap:
+      name: known-hosts
+  - name: gradle
+    emptyDir: {}
+    '''
     }
   }
 
@@ -25,14 +51,26 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout scm
+        script {
+          currentBuild.displayName = "#${BUILD_NUMBER}(${params.OLD_VERSION} -> ${params.NEW_VERSION})"
+        }
+      }
+    }
+    stage('Build xtext-apidiff') {
+      steps {
+        script {
+          dir ('xtext-apidiff') {
+            sh '''
+              ./gradlew clean build
+              cp -f build/libs/japicmp-ext.jar ..
+            '''
+          }
+        }
       }
     }
     stage('Create API Diff') {
       steps {
-        script {
-          currentBuild.displayName = "#${BUILD_NUMBER}(${params.OLD_VERSION} -> ${params.NEW_VERSION})"
-        }
-        sh "./create-api-diff.sh"
+        sh './create-api-diff.sh'
       }
     }
   } // END stages
@@ -65,12 +103,14 @@ pipeline {
               color = '#666666'
           }
 
+          /*
           slackSend (
             message: "${lastResult} => ${curResult}: <${env.BUILD_URL}|${env.JOB_NAME}#${env.BUILD_NUMBER}>",
             botUser: true,
             channel: 'xtext-builds',
             color: "${color}"
           )
+          */
         }
       }
     }

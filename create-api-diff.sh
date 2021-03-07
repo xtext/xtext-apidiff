@@ -2,7 +2,6 @@
 # Use the build container for testing to avoid OS specific interpretation:
 # docker run -it -v $(pwd):/xtext -w /xtext eclipsecbi/jiro-agent-centos-7 bash
 
-
 declare -A VERSION_2_BUILDID
 VERSION_2_BUILDID["2.25.0"]="R202103011429"
 VERSION_2_BUILDID["2.24.0"]="R202011301016"
@@ -108,10 +107,6 @@ done
 
 echo ""
 echo "Creating the actual diff"
-cd xtext-apidiff
-./gradlew clean build
-cd ..
-cp -f xtext-apidiff/build/libs/japicmp-ext.jar .
 
 # update apicmp.properties
 {
