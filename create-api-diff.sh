@@ -71,7 +71,7 @@ download () {
    ZIP_FILE=tmf-xtext-Update-$XTEXT_VERSION.zip
 
    if [ ! -d tmf-xtext-Update-$XTEXT_VERSION ]; then
-      echo "Downloading Xtext $XTEXT_VERSION"
+      echo "Downloading Xtext $XTEXT_VERSION from $DOWNLOAD_URL"
       # check existence of file
       if [ $(curl -s -o /dev/null -w '%{http_code}' $DOWNLOAD_URL) == 404 ]; then
          echo "Not found: $DOWNLOAD_URL"
@@ -88,9 +88,7 @@ if [ -d tmf-xtext-Update-$DEV_VERSION ]; then
   rm -r tmf-xtext-Update-$DEV_VERSION
 fi
 DOWNLOAD_URL=https://ci.eclipse.org/xtext/job/xtext-umbrella/job/master/lastStableBuild/artifact/build/org.eclipse.xtext.sdk.p2-repository-$DEV_VERSION-SNAPSHOT.zip
-
 download $DEV_VERSION $DOWNLOAD_URL
-
 
 # download NEW_VERSION and OLD_VERSION if not present
 for ((idx=0; idx<${#BUILD_IDS[@]}; ++idx)); do
@@ -99,7 +97,7 @@ for ((idx=0; idx<${#BUILD_IDS[@]}; ++idx)); do
 
    # only download relevant versions
    if [ $VERSION == $NEW_VERSION ] || [ $VERSION == $OLD_VERSION ]; then
-      download $VERSION $DOWNLOAD_URL
+      download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
    fi
 done
 
