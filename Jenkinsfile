@@ -1,33 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      label 'xtext-xtend-api-diff'
-      defaultContainer 'jnlp'
-      yaml '''
-apiVersion: v1
-kind: Pod
-spec:
-  containers:
-  - name: jnlp
-    image: 'eclipsecbi/jenkins-jnlp-agent'
-    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
-    resources:
-      limits:
-        memory: "3.5Gi"
-        cpu: "1.0"
-      requests:
-        memory: "3.5Gi"
-        cpu: "1.0"
-    volumeMounts:
-    - name: gradle
-      mountPath: /home/jenkins/.gradle
-  volumes:
-  - name: volume-known-hosts
-    configMap:
-      name: known-hosts
-  - name: gradle
-    emptyDir: {}
-    '''
+      label 'centos-7'
     }
   }
 
@@ -35,6 +9,10 @@ spec:
     buildDiscarder(logRotator(numToKeepStr:'15'))
     disableConcurrentBuilds()
     timeout(time: 45, unit: 'MINUTES')
+  }
+
+  environment {
+      GRADLE_USER_HOME = "$WORKSPACE/.gradle" // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=564559
   }
 
   // https://jenkins.io/doc/book/pipeline/syntax/#triggers
@@ -103,14 +81,12 @@ spec:
               color = '#666666'
           }
 
-          /*
           slackSend (
             message: "${lastResult} => ${curResult}: <${env.BUILD_URL}|${env.JOB_NAME}#${env.BUILD_NUMBER}>",
             botUser: true,
             channel: 'xtext-builds',
             color: "${color}"
           )
-          */
         }
       }
     }
