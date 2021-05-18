@@ -24,11 +24,15 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'ISO-8859-1'
 }
 
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 dependencies {
 	implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtextVersion"
 	implementation 'com.github.siom79.japicmp:japicmp:0.5.0'
+	implementation 'javax.xml.bind:jaxb-api:2.2.7'
+	implementation 'com.sun.xml.bind:jaxb-core:2.2.7'
+	implementation 'com.sun.xml.bind:jaxb-impl:2.2.7'
+	implementation 'javax.activation:activation:1.1'
 }
 
 sourceSets {
