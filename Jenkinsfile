@@ -39,7 +39,7 @@ pipeline {
         script {
           dir ('xtext-apidiff') {
             sh '''
-              ./gradlew clean build
+              ./gradlew clean build --warning-mode all
               cp -f build/libs/japicmp-ext.jar ..
             '''
           }
