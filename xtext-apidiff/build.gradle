@@ -29,8 +29,7 @@ sourceCompatibility = '11'
 
 dependencies {
 	implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtextVersion"
-	implementation 'com.github.siom79.japicmp:japicmp:0.5.0'
-	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+	implementation 'com.github.siom79.japicmp:japicmp:0.15.4'
 	implementation 'com.sun.xml.bind:jaxb-core:3.0.2'
 	implementation 'com.sun.xml.bind:jaxb-impl:3.0.2'
 	implementation 'javax.activation:activation:1.1'

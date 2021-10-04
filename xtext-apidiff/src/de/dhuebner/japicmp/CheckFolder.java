@@ -4,19 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import com.google.common.base.Optional;
-
-import io.airlift.airline.SingleCommand;
-import japicmp.cli.JApiCli;
+import japicmp.cli.CliParser;
 import japicmp.config.Options;
 import japicmp.exception.JApiCmpException;
 import japicmp.model.AccessModifier;
+import japicmp.util.Optional;
 
 public class CheckFolder {
 	public static void main(String[] args) throws Exception {
-		SingleCommand<JApiCli.Compare> singleCommand = SingleCommand.singleCommand(
-				JApiCli.Compare.class);
-		JApiCli.Compare cmd = singleCommand.parse(args);
+		Options cmd = Options.newDefault();
 		Properties properties = new Properties(CheckFolder.createDefaults());
 		File propsFile = new File("japicmp.properties");
 		if (propsFile.exists()) {
@@ -56,46 +52,19 @@ public class CheckFolder {
 		return properties;
 	}
 
-	private static Options createOptions(JApiCli.Compare it, Properties properties) {
-		Options options = new Options();
-		if (it.pathToNewVersionJar != null) {
-			options.setNewArchive(new File(it.pathToNewVersionJar));
-		}
-		if (it.pathToOldVersionJar != null) {
-			options.setOldArchive(new File(it.pathToOldVersionJar));
-		}
-		options.setXmlOutputFile(Optional.fromNullable(it.pathToXmlOutputFile));
-		options.setHtmlOutputFile(Optional.fromNullable(it.pathToHtmlOutputFile));
+	private static Options createOptions(Options options, Properties properties) {
 		options.setOutputOnlyModifications(true);
-		options.setAccessModifier(CheckFolder.toModifier(it.accessModifier));
-		options.addIncludeFromArgument(Optional.fromNullable(it.includes));
-		options.addExcludeFromArgument(Optional.fromNullable(it.excludes));
-		options.setOutputOnlyBinaryIncompatibleModifications(it.onlyBinaryIncompatibleModifications);
-		options.setIncludeSynthetic(it.includeSynthetic);
 		String packageExclude = properties.getProperty("package.exclude");
 		String packageInclude = properties.getProperty("package.include");
 		for (String pattern : packageExclude.split(",")) {
-			options.addExcludeFromArgument(Optional.of(pattern));
+			options.addExcludeFromArgument(Optional.of(pattern), false);
 		}
 		for (String pattern : packageInclude.split(",")) {
-			options.addIncludeFromArgument(Optional.of(pattern));
+			options.addIncludeFromArgument(Optional.of(pattern), false);
 		}
 		options.setXmlOutputFile(Optional.of(properties.getProperty("xmlOutputFile")));
 		options.setHtmlOutputFile(Optional.of(properties.getProperty("htmlOutputFile")));
 		return options;
 	}
 
-	private static Optional<AccessModifier> toModifier(String accessModifierArg) {
-		Optional<String> stringOptional = Optional.fromNullable(accessModifierArg);
-		if (stringOptional.isPresent()) {
-			try {
-				return Optional.of(AccessModifier.valueOf(stringOptional.get().toUpperCase()));
-			} catch (IllegalArgumentException e) {
-				throw new JApiCmpException(JApiCmpException.Reason.CliError, String.format("Invalid value for option -a: %s. Possible values are: %s.",
-						accessModifierArg, AccessModifier.listOfAccessModifier()));
-			}
-		} else {
-			return Optional.of(AccessModifier.PROTECTED);
-		}
-	}
 }

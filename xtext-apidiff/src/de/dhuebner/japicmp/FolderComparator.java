@@ -26,6 +26,9 @@ import japicmp.cmp.JarArchiveComparatorOptions;
 import japicmp.config.Options;
 import japicmp.exception.JApiCmpException;
 import japicmp.model.JApiClass;
+import japicmp.output.xml.XmlOutput;
+import japicmp.output.xml.XmlOutputGenerator;
+import japicmp.output.xml.XmlOutputGeneratorOptions;
 import javassist.ClassPool;
 import javassist.CtClass;
 
@@ -60,10 +63,10 @@ public class FolderComparator {
 		List<CtClass> oldClasses = Lists.<CtClass>newArrayList();
 		List<CtClass> newClasses = Lists.<CtClass>newArrayList();
 		for (File f : oldVersion.listFiles(xtextFilter)) {
-			oldClasses.addAll(createListOfCtClasses(f, jarArchiveComparator.getClassPool(), comparatorOptions));
+			oldClasses.addAll(createListOfCtClasses(f, jarArchiveComparator.getCommonClassPool(), comparatorOptions));
 		}
 		for (File f : newVersion.listFiles(xtextFilter)) {
-			newClasses.addAll(createListOfCtClasses(f, jarArchiveComparator.getClassPool(), comparatorOptions));
+			newClasses.addAll(createListOfCtClasses(f, jarArchiveComparator.getCommonClassPool(), comparatorOptions));
 		}
 		System.out.println("Old version classes: " + oldClasses.size());
 		System.out.println("New version classes: " + newClasses.size());
@@ -75,9 +78,10 @@ public class FolderComparator {
 		ReporterInformation info = new ReporterInformation();
 		info.setDocumentationName(properties.getProperty("docuName"));
 		info.setOutputFolder(outputFolder.getAbsolutePath());
-		MultiPageHtmlReport htmlGenerator = new MultiPageHtmlReport(info, oldVersion.getAbsolutePath(),
-				newVersion.getAbsolutePath(), compareResult, options);
-		htmlGenerator.generate();
+		XmlOutputGeneratorOptions xmlOptions = new XmlOutputGeneratorOptions();
+		MultiPageHtmlReport htmlGenerator = new MultiPageHtmlReport(info, compareResult, options, xmlOptions );
+		XmlOutput xmlOutput = htmlGenerator.generate();
+		XmlOutputGenerator.writeToFiles(options, xmlOutput);
 		System.out.println("Output in: " + outputFolder.getAbsolutePath());
 		System.out.println(watch + " Finished...");
 	}

@@ -21,8 +21,8 @@ pipeline {
   }
   
   parameters {
-    choice(name: 'OLD_VERSION', choices: ['2.25.0', '2.24.0', '2.23.0', '2.22.0', '2.21.0', '2.20.0', '2.19.0', '2.18.0', '2.17.1', '2.17.0'], description: 'Old Version')
-    choice(name: 'NEW_VERSION', choices: ['2.26.0', '2.25.0', '2.24.0', '2.23.0', '2.22.0', '2.21.0', '2.20.0', '2.19.0', '2.18.0', '2.17.1', '2.17.0'], description: 'New Version')
+    choice(name: 'OLD_VERSION', choices: ['2.25.0', '2.24.0'], description: 'Old Version')
+    choice(name: 'NEW_VERSION', choices: ['2.26.0', '2.25.0', '2.24.0'], description: 'New Version')
   }
 
   stages {
@@ -55,7 +55,7 @@ pipeline {
   
   post {
     always {
-      archiveArtifacts artifacts: 'output/**'
+      archiveArtifacts artifacts: 'output/**, eclipse/.director-ws/.metadata/.log'
     }
     cleanup {
       script {

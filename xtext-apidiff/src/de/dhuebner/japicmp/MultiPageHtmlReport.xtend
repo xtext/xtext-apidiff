@@ -4,14 +4,16 @@ import japicmp.config.Options
 import japicmp.model.AccessModifier
 import japicmp.model.JApiAnnotation
 import japicmp.model.JApiAnnotationElement
-import japicmp.model.JApiBinaryCompatibility
 import japicmp.model.JApiChangeStatus
 import japicmp.model.JApiClass
+import japicmp.model.JApiCompatibility
 import japicmp.model.JApiHasChangeStatus
 import japicmp.model.JApiModifier
 import japicmp.model.JApiParameter
 import japicmp.model.JApiReturnType
 import japicmp.output.xml.XmlOutputGenerator
+import japicmp.output.xml.XmlOutputGeneratorOptions
+import japicmp.util.Optional
 import java.io.File
 import java.io.PrintWriter
 import java.nio.file.Files
@@ -30,19 +32,19 @@ class MultiPageHtmlReport extends XmlOutputGenerator {
 
 	ReporterInformation info
 
-	new(String oldArchivePath, String newArchivePath, List<JApiClass> jApiClasses, Options options) {
-		super(oldArchivePath, newArchivePath, jApiClasses, options)
+	new(List<JApiClass> jApiClasses, Options options, XmlOutputGeneratorOptions xmlOptions) {
+		super(jApiClasses, options, xmlOptions)
 	}
 
-	new(ReporterInformation info, String oldArchivePath, String newArchivePath, List<JApiClass> jApiClasses,
-		Options options) {
-		this(oldArchivePath, newArchivePath, jApiClasses, options)
+	new(ReporterInformation info, List<JApiClass> jApiClasses,
+		Options options, XmlOutputGeneratorOptions xmlOptions) {
+		this(jApiClasses, options, xmlOptions)
 		this.info = info;
 	}
 
 	override generate() {
 		// need to call super to get a filtered list of jApiClasses
-		super.generate()
+		val result = super.generate()
 
 		val outputFolder = new File(info.outputFolder);
 		copyResources(outputFolder)
@@ -76,7 +78,7 @@ class MultiPageHtmlReport extends XmlOutputGenerator {
 			val writer = new PrintWriter(outputFolder + "/packages/" + packageName + ".html")
 			writer.append(createPackageSiteContent(packageName, byPackage)).close
 		}
-		return null
+		return result
 	}
 
 	def copyResources(File outputRoot) {
@@ -374,7 +376,7 @@ class MultiPageHtmlReport extends XmlOutputGenerator {
 			])
 	}
 
-	def <T extends JApiBinaryCompatibility & JApiHasChangeStatus> String changeStatusLabel(T japiType) {
+	def <T extends JApiCompatibility & JApiHasChangeStatus> String changeStatusLabel(T japiType) {
 		return japiType.changeStatus + if(!japiType.binaryCompatible) " (!)" else ""
 	}
 
@@ -529,4 +531,5 @@ class MultiPageHtmlReport extends XmlOutputGenerator {
 			</html>
 		'''
 	}
+
 }
