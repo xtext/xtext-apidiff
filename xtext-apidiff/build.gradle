@@ -1,12 +1,12 @@
 buildscript {
 	repositories.mavenCentral()
 	dependencies {
-		classpath 'org.xtext:xtext-gradle-plugin:2.0.7'
+		classpath 'org.xtext:xtext-gradle-plugin:2.1.0'
 	}
 }
 
 plugins {
-	id 'com.github.johnrengelman.shadow' version '5.1.0'
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 repositories.mavenCentral()
@@ -48,5 +48,5 @@ sourceSets {
 }
 
 shadowJar {
-	archiveName = "japicmp-ext.jar"
+	archiveFileName = "japicmp-ext.jar"
 }
