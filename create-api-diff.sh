@@ -5,33 +5,18 @@
 declare -A VERSION_2_BUILDID
 VERSION_2_BUILDID["2.25.0"]="R202103011429"
 VERSION_2_BUILDID["2.24.0"]="R202011301016"
-VERSION_2_BUILDID["2.23.0"]="R202008310926"
-VERSION_2_BUILDID["2.22.0"]="R202006021533"
-VERSION_2_BUILDID["2.21.0"]="R202003021509"
-VERSION_2_BUILDID["2.20.0"]="R201912021256"
-VERSION_2_BUILDID["2.19.0"]="R201909021322"
-VERSION_2_BUILDID["2.18.0"]="R201906031516"
-VERSION_2_BUILDID["2.17.1"]="R201904030733"
-VERSION_2_BUILDID["2.17.0"]="R201903041445"
 
 VERSIONS=(2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
 BUILD_IDS=(R202103011429\
- R202011301016 \
- R202008310926 \
- R202006021533 \
- R202003021509 \
- R201912021256 \
- R201909021322 \
- R201906031516 \
- R201904030733 \
- R201903041445)
+ R202011301016)
 
 DEV_VERSION=$(curl -s https://raw.githubusercontent.com/eclipse/xtext-core/master/gradle/versions.gradle |grep -Po "version = \'\K([^\']*)(?=\')" |sed 's/-SNAPSHOT//')
 
 # The Eclipse release to use
-ECLIPSE_RELEASE=2020-06
-ECLIPSE_TARGZ_FILE=eclipse-SDK-4.13-linux-gtk-x86_64.tar.gz
-ECLIPSE_TARGZ_DOWNLOAD_URL=http://download.eclipse.org/eclipse/downloads/drops4/R-4.13-201909161045/$ECLIPSE_TARGZ_FILE
+# https://download.eclipse.org/eclipse/downloads/drops4/R-4.21-202109060500/download.php?dropFile=eclipse-SDK-4.21-linux-gtk-x86_64.tar.gz
+ECLIPSE_RELEASE=2021-09
+ECLIPSE_TARGZ_FILE=eclipse-SDK-4.21-linux-gtk-x86_64.tar.gz
+ECLIPSE_TARGZ_DOWNLOAD_URL=http://download.eclipse.org/eclipse/downloads/drops4/R-4.21-202109060500/$ECLIPSE_TARGZ_FILE
 ECLIPSE_XTEXT_VERSION=${VERSIONS[0]}
 
 
@@ -59,8 +44,8 @@ if [ ! -d eclipse ]; then
    echo "Installing additional features: Xtext and dependent"
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
-   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
-   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,http://download.eclipse.org/lsp4j/updates/releases/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.12.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.12.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
    -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j \
    -destination eclipse
 fi

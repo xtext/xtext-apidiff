@@ -1,16 +1,14 @@
 package de.dhuebner.japicmp;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
-import de.dhuebner.japicmp.ReporterInformation;
 import japicmp.config.Options;
 import japicmp.model.AccessModifier;
 import japicmp.model.JApiAnnotation;
 import japicmp.model.JApiAnnotationElement;
-import japicmp.model.JApiBinaryCompatibility;
 import japicmp.model.JApiChangeStatus;
 import japicmp.model.JApiClass;
+import japicmp.model.JApiCompatibility;
 import japicmp.model.JApiConstructor;
 import japicmp.model.JApiField;
 import japicmp.model.JApiHasChangeStatus;
@@ -20,7 +18,10 @@ import japicmp.model.JApiModifier;
 import japicmp.model.JApiParameter;
 import japicmp.model.JApiReturnType;
 import japicmp.model.JApiSuperclass;
+import japicmp.output.xml.XmlOutput;
 import japicmp.output.xml.XmlOutputGenerator;
+import japicmp.output.xml.XmlOutputGeneratorOptions;
+import japicmp.util.Optional;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -51,19 +52,19 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
   
   private ReporterInformation info;
   
-  public MultiPageHtmlReport(final String oldArchivePath, final String newArchivePath, final List<JApiClass> jApiClasses, final Options options) {
-    super(oldArchivePath, newArchivePath, jApiClasses, options);
+  public MultiPageHtmlReport(final List<JApiClass> jApiClasses, final Options options, final XmlOutputGeneratorOptions xmlOptions) {
+    super(jApiClasses, options, xmlOptions);
   }
   
-  public MultiPageHtmlReport(final ReporterInformation info, final String oldArchivePath, final String newArchivePath, final List<JApiClass> jApiClasses, final Options options) {
-    this(oldArchivePath, newArchivePath, jApiClasses, options);
+  public MultiPageHtmlReport(final ReporterInformation info, final List<JApiClass> jApiClasses, final Options options, final XmlOutputGeneratorOptions xmlOptions) {
+    this(jApiClasses, options, xmlOptions);
     this.info = info;
   }
   
   @Override
-  public Void generate() {
+  public XmlOutput generate() {
     try {
-      super.generate();
+      final XmlOutput result = super.generate();
       String _outputFolder = this.info.getOutputFolder();
       final File outputFolder = new File(_outputFolder);
       this.copyResources(outputFolder);
@@ -110,7 +111,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           writer.append(this.createPackageSiteContent(packageName, byPackage)).close();
         }
       }
-      return null;
+      return result;
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -666,7 +667,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.newLineIfNotEmpty();
               _builder.append("\t\t");
               _builder.append("<td class=\"colLast\"><code>");
-              String _get_2 = clazzReport_1.getSuperclass().getNewSuperclass().or(clazzReport_1.getSuperclass().getOldSuperclass()).get();
+              CtClass _get_2 = clazzReport_1.getSuperclass().getNewSuperclass().or(clazzReport_1.getSuperclass().getOldSuperclass()).get();
               _builder.append(_get_2, "\t\t");
               _builder.append("</code></td>");
               _builder.newLineIfNotEmpty();
@@ -973,7 +974,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     return this.packageFileBody(packageName, _function);
   }
   
-  public <T extends JApiBinaryCompatibility & JApiHasChangeStatus> String changeStatusLabel(final T japiType) {
+  public <T extends JApiCompatibility & JApiHasChangeStatus> String changeStatusLabel(final T japiType) {
     JApiChangeStatus _changeStatus = japiType.getChangeStatus();
     String _xifexpression = null;
     boolean _isBinaryCompatible = japiType.isBinaryCompatible();
