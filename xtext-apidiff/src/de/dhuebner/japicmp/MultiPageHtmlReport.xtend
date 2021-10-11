@@ -13,7 +13,6 @@ import japicmp.model.JApiParameter
 import japicmp.model.JApiReturnType
 import japicmp.output.xml.XmlOutputGenerator
 import japicmp.output.xml.XmlOutputGeneratorOptions
-import japicmp.util.Optional
 import java.io.File
 import java.io.PrintWriter
 import java.nio.file.Files

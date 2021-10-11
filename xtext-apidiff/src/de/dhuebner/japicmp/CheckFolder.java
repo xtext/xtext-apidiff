@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import japicmp.cli.CliParser;
 import japicmp.config.Options;
-import japicmp.exception.JApiCmpException;
-import japicmp.model.AccessModifier;
 import japicmp.util.Optional;
 
 public class CheckFolder {
