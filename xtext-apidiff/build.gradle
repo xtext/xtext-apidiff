@@ -2,12 +2,12 @@ buildscript {
 	repositories.mavenCentral()
 	repositories.gradlePluginPortal()
 	dependencies {
-		classpath 'org.xtext:xtext-gradle-plugin:2.1.0'
+		classpath 'org.xtext:xtext-gradle-plugin:3.0.1'
 	}
 }
 
 plugins {
-	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories.mavenCentral()
