@@ -13,6 +13,7 @@ pipeline {
 
   environment {
       GRADLE_USER_HOME = "$WORKSPACE/.gradle" // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=564559
+      GITHUB_API_CREDENTIALS_ID = 'github-bot-token'
   }
 
   // https://jenkins.io/doc/book/pipeline/syntax/#triggers
@@ -48,9 +49,14 @@ pipeline {
     }
     stage('Create API Diff') {
       steps {
-        sh './create-api-diff.sh'
+        withCredentials([string(credentialsId: "${GITHUB_API_CREDENTIALS_ID}", variable: 'GITHUB_API_TOKEN')]) {
+          script {
+            env.DEV_VERSION = getCurrentXtextVersion("master")
+            sh './create-api-diff.sh'
+          }
+        }
       }
-    }
+    } // END stage
   } // END stages
   
   post {
@@ -92,4 +98,12 @@ pipeline {
     }
   }
 
+}
+
+def getCurrentXtextVersion (branch) {
+  env.BRANCH_REF="${branch}"
+  version = sh (returnStdout: true, 
+    script: 'curl -sSL -H "Cookie: logged_in=no" -H "Authorization: token $GITHUB_API_TOKEN" -H "Content-Type: text/plain; charset=utf-8" https://api.github.com/repos/eclipse/xtext-lib/contents/gradle/versions.gradle?ref=$BRANCH_REF| jq -r ".content" | base64 -d | grep -Po "version = \\\'\\K([^\\\']*)(?=\\\')"')  
+  version = version.replace('-SNAPSHOT','').trim()
+  return version
 }

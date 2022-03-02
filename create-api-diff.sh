@@ -11,7 +11,11 @@ VERSIONS=(2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 
 BUILD_IDS=(R202202280901\
  R202103011429\
  R202011301016)
-DEV_VERSION=$(curl -sS https://raw.githubusercontent.com/eclipse/xtext-core/master/gradle/versions.gradle |grep -Po "version = \'\K([^\']*)(?=\')" |sed 's/-SNAPSHOT//')
+
+if [ -z "$DEV_VERSION" ]; then
+   echo "Using fallback to retrieve DEV_VERSION"
+   DEV_VERSION=$(curl -sS https://raw.githubusercontent.com/eclipse/xtext-core/master/gradle/versions.gradle |grep -Po "version = \'\K([^\']*)(?=\')" |sed 's/-SNAPSHOT//')
+fi
 
 # The Eclipse release to use
 # https://download.eclipse.org/eclipse/downloads/drops4/R-4.21-202109060500/download.php?dropFile=eclipse-SDK-4.21-linux-gtk-x86_64.tar.gz
