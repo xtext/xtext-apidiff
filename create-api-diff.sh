@@ -3,12 +3,14 @@
 # docker run -it -v $(pwd):/xtext -w /xtext eclipsecbi/jiro-agent-centos-7 bash
 
 declare -A VERSION_2_BUILDID
+VERSION_2_BUILDID["2.27.0"]="R202205300508"
 VERSION_2_BUILDID["2.26.0"]="R202202280901"
 VERSION_2_BUILDID["2.25.0"]="R202103011429"
 VERSION_2_BUILDID["2.24.0"]="R202011301016"
 
-VERSIONS=(2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
-BUILD_IDS=(R202202280901\
+VERSIONS=(2.27.0 2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
+BUILD_IDS=(R202205300508\
+ R202202280901\
  R202103011429\
  R202011301016)
 
@@ -49,9 +51,9 @@ if [ ! -d eclipse ]; then
    echo "Installing additional features: Xtext and dependent"
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
-   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.12.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
-   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.12.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
-   -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j \
+   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.14.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.14.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j,org.eclipse.xpand,org.eclipse.xtend,org.eclipse.xtend.typesystem.emf \
    -destination eclipse
 fi
 

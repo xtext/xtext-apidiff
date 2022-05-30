@@ -22,8 +22,8 @@ pipeline {
   }
   
   parameters {
-    choice(name: 'OLD_VERSION', choices: ['2.26.0', '2.25.0', '2.24.0'], description: 'Old Version')
-    choice(name: 'NEW_VERSION', choices: ['2.27.0', '2.26.0', '2.25.0', '2.24.0'], description: 'New Version')
+    choice(name: 'OLD_VERSION', choices: ['2.27.0', '2.26.0', '2.25.0', '2.24.0'], description: 'Old Version')
+    choice(name: 'NEW_VERSION', choices: ['2.28.0', '2.27.0', '2.26.0', '2.25.0', '2.24.0'], description: 'New Version')
   }
 
   stages {
