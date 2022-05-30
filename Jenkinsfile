@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      inheritFrom 'centos-7'
+      inheritFrom 'centos-8'
     }
   }
 
@@ -9,6 +9,10 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr:'15'))
     disableConcurrentBuilds()
     timeout(time: 45, unit: 'MINUTES')
+  }
+
+  tools {
+     jdk "temurin-jdk11-latest"
   }
 
   environment {
