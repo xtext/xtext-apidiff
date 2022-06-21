@@ -1,6 +1,6 @@
 #!/bin/bash
 # Use the build container for testing to avoid OS specific interpretation:
-# docker run -it -v $(pwd):/xtext -w /xtext eclipsecbi/jiro-agent-centos-7 bash
+# docker run -it -v $(pwd):/xtext -w /xtext eclipsecbi/jiro-agent-centos-8 bash
 
 declare -A VERSION_2_BUILDID
 VERSION_2_BUILDID["2.27.0"]="R202205300508"
