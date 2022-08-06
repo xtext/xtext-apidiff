@@ -51,8 +51,8 @@ if [ ! -d eclipse ]; then
    echo "Installing additional features: Xtext and dependent"
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
-   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.14.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
-   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.14.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.15.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.15.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
    -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j,org.eclipse.xpand,org.eclipse.xtend,org.eclipse.xtend.typesystem.emf \
    -destination eclipse
 fi
