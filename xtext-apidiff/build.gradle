@@ -12,7 +12,7 @@ plugins {
 
 repositories.mavenCentral()
 
-ext.xtextVersion = '2.27.0'
+ext.xtextVersion = '2.29.0'
 
 apply plugin: 'java'
 apply plugin: 'application'
