@@ -2,7 +2,7 @@ buildscript {
 	repositories.mavenCentral()
 	repositories.gradlePluginPortal()
 	dependencies {
-		classpath 'org.xtext:xtext-gradle-plugin:3.0.2'
+		classpath 'org.xtext:xtext-gradle-plugin:4.0.0'
 	}
 }
 
@@ -12,7 +12,7 @@ plugins {
 
 repositories.mavenCentral()
 
-ext.xtextVersion = '2.29.0'
+ext.xtextVersion = '2.30.0'
 
 apply plugin: 'java'
 apply plugin: 'application'
@@ -39,7 +39,7 @@ sourceSets {
 	main {
 		java.srcDirs = ['src', 'xtend-gen']
 		resources.srcDirs = ['src', 'resources']
-		xtendOutputDir = 'xtend-gen'
+		xtend.outputDir = 'xtend-gen'
 	}
 	test {
 		java.srcDirs = []
