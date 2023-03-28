@@ -85,7 +85,7 @@ download () {
 if [ -d tmf-xtext-Update-$DEV_VERSION ]; then
   rm -r tmf-xtext-Update-$DEV_VERSION
 fi
-DOWNLOAD_URL=https://ci.eclipse.org/xtext/job/xtext-umbrella/job/master/lastStableBuild/artifact/build/org.eclipse.xtext.sdk.p2-repository-$DEV_VERSION-SNAPSHOT.zip
+DOWNLOAD_URL=https://ci.eclipse.org/xtext/job/xtext/job/main/lastStableBuild/artifact/build/org.eclipse.xtext.p2repository-$DEV_VERSION-SNAPSHOT.zip
 download $DEV_VERSION $DOWNLOAD_URL
 
 # download NEW_VERSION and OLD_VERSION if not present
@@ -106,13 +106,17 @@ echo "Creating the actual diff"
 
 # update apicmp.properties
 {
-	echo "old.version=${OLD_VERSION}"
-	echo "new.version=${NEW_VERSION}"
-	echo "old.location=tmf-xtext-Update-${OLD_VERSION}/plugins/"
-	echo "new.location=tmf-xtext-Update-${NEW_VERSION}/plugins/"
-	echo "cpLocation=eclipse/plugins"
-
+   echo "old.version=${OLD_VERSION}"
+   echo "new.version=${NEW_VERSION}"
+   echo "old.location=tmf-xtext-Update-${OLD_VERSION}/plugins/"
+   echo "new.location=tmf-xtext-Update-${NEW_VERSION}/plugins/"
+   echo "cpLocation=eclipse/plugins"
 } > japicmp.properties
 
+echo "using japicmp.properties"
+cat japicmp.properties
+echo ""
+echo "calling java -Xmx2G -jar japicmp-ext.jar"
+
 rm -rf output
-java -jar japicmp-ext.jar
+java -Xmx2G -jar japicmp-ext.jar
