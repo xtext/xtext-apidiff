@@ -26,8 +26,8 @@ pipeline {
   }
   
   parameters {
-    choice(name: 'OLD_VERSION', choices: ['2.30.0', '2.29.0', '2.28.0', '2.27.0', '2.26.0', '2.25.0', '2.24.0'], description: 'Old Version')
-    choice(name: 'NEW_VERSION', choices: ['2.31.0', '2.30.0', '2.29.0', '2.28.0', '2.27.0', '2.26.0', '2.25.0', '2.24.0'], description: 'New Version')
+    choice(name: 'OLD_VERSION', choices: ['2.31.0', '2.30.0', '2.29.0', '2.28.0', '2.27.0', '2.26.0', '2.25.0', '2.24.0'], description: 'Old Version')
+    choice(name: 'NEW_VERSION', choices: ['2.32.0', '2.31.0', '2.30.0', '2.29.0', '2.28.0', '2.27.0', '2.26.0', '2.25.0', '2.24.0'], description: 'New Version')
   }
 
   stages {
@@ -55,7 +55,7 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: "${GITHUB_API_CREDENTIALS_ID}", variable: 'GITHUB_API_TOKEN')]) {
           script {
-            env.DEV_VERSION = getCurrentXtextVersion("master")
+            env.DEV_VERSION = getCurrentXtextVersion("main")
             sh './create-api-diff.sh'
           }
         }
@@ -107,7 +107,7 @@ pipeline {
 def getCurrentXtextVersion (branch) {
   env.BRANCH_REF="${branch}"
   version = sh (returnStdout: true, 
-    script: 'curl -sSL -H "Cookie: logged_in=no" -H "Authorization: token $GITHUB_API_TOKEN" -H "Content-Type: text/plain; charset=utf-8" https://api.github.com/repos/eclipse/xtext-lib/contents/gradle/versions.gradle?ref=$BRANCH_REF| jq -r ".content" | base64 -d | grep -Po "version = \\\'\\K([^\\\']*)(?=\\\')"')  
+    script: 'curl -sSL -H "Cookie: logged_in=no" -H "Authorization: token $GITHUB_API_TOKEN" -H "Content-Type: text/plain; charset=utf-8" https://api.github.com/repos/eclipse/xtext/contents/pom.xml?ref=$BRANCH_REF| jq -r ".content" | base64 -d | grep -Po "([0-9]+\\.[0-9]+\\.[0-9]+)-SNAPSHOT"')  
   version = version.replace('-SNAPSHOT','').trim()
   return version
 }
