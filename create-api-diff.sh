@@ -3,6 +3,7 @@
 # docker run -it -v $(pwd):/xtext -w /xtext eclipsecbi/jiro-agent-centos-8 bash
 
 declare -A VERSION_2_BUILDID
+VERSION_2_BUILDID["2.31.0"]=""
 VERSION_2_BUILDID["2.30.0"]="R202302271344"
 VERSION_2_BUILDID["2.29.0"]="R202211211054"
 VERSION_2_BUILDID["2.28.0"]="R202208290555"
@@ -11,8 +12,9 @@ VERSION_2_BUILDID["2.26.0"]="R202202280901"
 VERSION_2_BUILDID["2.25.0"]="R202103011429"
 VERSION_2_BUILDID["2.24.0"]="R202011301016"
 
-VERSIONS=(2.30.0 2.29.0 2.28.0 2.27.0 2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
-BUILD_IDS=(R202302271344\
+VERSIONS=(2.31.0 2.30.0 2.29.0 2.28.0 2.27.0 2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
+ BUILD_IDS=(""\
+ R202302271344\
  R202211211054\
  R202208290555\
  R202205300508\
@@ -22,14 +24,14 @@ BUILD_IDS=(R202302271344\
 
 if [ -z "$DEV_VERSION" ]; then
    echo "Using fallback to retrieve DEV_VERSION"
-   DEV_VERSION=$(curl -sS https://raw.githubusercontent.com/eclipse/xtext-core/master/gradle/versions.gradle |grep -Po "version = \'\K([^\']*)(?=\')" |sed 's/-SNAPSHOT//')
+   DEV_VERSION=$(curl -sS https://raw.githubusercontent.com/eclipse/xtext/main/pom.xml|grep -Po "([0-9]+\.[0-9]+\.[0-9]+)-SNAPSHOT" |sed 's/-SNAPSHOT//')
 fi
 
 # The Eclipse release to use
 # https://download.eclipse.org/eclipse/downloads/drops4/R-4.21-202109060500/download.php?dropFile=eclipse-SDK-4.21-linux-gtk-x86_64.tar.gz
 ECLIPSE_RELEASE=2022-03
 ECLIPSE_TARGZ_FILE=eclipse-SDK-4.23-linux-gtk-x86_64.tar.gz
-ECLIPSE_TARGZ_DOWNLOAD_URL=http://download.eclipse.org/eclipse/downloads/drops4/R-4.23-202203080310/$ECLIPSE_TARGZ_FILE
+ECLIPSE_TARGZ_DOWNLOAD_URL=https://download.eclipse.org/eclipse/downloads/drops4/R-4.23-202203080310/$ECLIPSE_TARGZ_FILE
 ECLIPSE_XTEXT_VERSION=${VERSIONS[0]}
 
 
@@ -57,8 +59,8 @@ if [ ! -d eclipse ]; then
    echo "Installing additional features: Xtext and dependent"
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
-   -metadataRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.20.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
-   -artifactRepository http://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases,http://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.20.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -metadataRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.14.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.21.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -artifactRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.14.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.21.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
    -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j,org.eclipse.xpand,org.eclipse.xtend,org.eclipse.xtend.typesystem.emf \
    -destination eclipse
 fi
@@ -92,10 +94,15 @@ download $DEV_VERSION $DOWNLOAD_URL
 for ((idx=0; idx<${#BUILD_IDS[@]}; ++idx)); do
    VERSION=${VERSIONS[idx]}
    BUILD_ID=${BUILD_IDS[idx]}
-
    # only download relevant versions
    if [ $VERSION == $NEW_VERSION ] || [ $VERSION == $OLD_VERSION ]; then
-      download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
+
+      if [ -z "$BUILD_ID" ];
+      then
+         download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
+      else
+         download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/tmf-xtext-Update-$VERSION.zip"
+      fi
    fi
 done
 
