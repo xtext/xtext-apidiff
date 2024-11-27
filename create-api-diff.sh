@@ -73,7 +73,7 @@ if [ ! -d eclipse ]; then
    -application org.eclipse.equinox.p2.director \
    -metadataRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.23.1/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
    -artifactRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/0.23.1/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
-   -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j,org.eclipse.xpand,org.eclipse.xtend,org.eclipse.xtend.typesystem.emf,org.eclipse.draw2d \
+   -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j,org.eclipse.draw2d \
    -destination eclipse
 fi
 
