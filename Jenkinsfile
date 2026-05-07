@@ -39,6 +39,19 @@ pipeline {
         }
       }
     }
+    stage('Copy Xtext DEV Build') {
+      steps {
+        script {
+          copyArtifacts(
+            projectName: 'xtext/job/main',
+            selector: lastSuccessful(),
+            filter: 'build/org.eclipse.xtext.p2repository-*.zip',
+            target: '.',
+            flatten: true
+          )
+        }
+      }
+    }
     stage('Build xtext-apidiff') {
       steps {
         script {

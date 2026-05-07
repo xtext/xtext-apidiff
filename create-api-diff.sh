@@ -96,6 +96,17 @@ download () {
     XTEXT_VERSION=$1
     DOWNLOAD_URL=$2
     ZIP_FILE=tmf-xtext-Update-$XTEXT_VERSION.zip
+
+    # For DEV version, check if already copied by Jenkins copyartifact plugin
+    if [[ "$XTEXT_VERSION" == "$DEV_VERSION" ]]; then
+        pre_copied="org.eclipse.xtext.p2repository-${XTEXT_VERSION}-SNAPSHOT.zip"
+        if [ -f "$pre_copied" ]; then
+            echo "Using pre-copied artifact: $pre_copied"
+            unzip -q "$pre_copied" -d "tmf-xtext-Update-${XTEXT_VERSION}"
+            return 0
+        fi
+    fi
+
     if [ ! -d tmf-xtext-Update-$XTEXT_VERSION ]; then
         echo "Downloading Xtext $XTEXT_VERSION from $DOWNLOAD_URL"
         DOWNLOAD_LOG_PREFIX="$LOG_DIR/download-$XTEXT_VERSION"
