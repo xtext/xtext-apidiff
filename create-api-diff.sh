@@ -2,6 +2,11 @@
 # Use the build container for testing to avoid OS specific interpretation:
 # docker run -it -v $(pwd):/xtext -w /xtext eclipsecbi/jiro-agent-centos-8 bash
 
+set -Eeuo pipefail
+
+LOG_DIR=${LOG_DIR:-logs}
+mkdir -p "$LOG_DIR"
+
 declare -A VERSION_2_BUILDID
 VERSION_2_BUILDID["2.42.0"]=""
 VERSION_2_BUILDID["2.41.0"]=""
@@ -44,7 +49,7 @@ BUILD_IDS=(""\
  R202103011429\
  R202011301016)
 
-if [ -z "$DEV_VERSION" ]; then
+if [ -z "${DEV_VERSION:-}" ]; then
    echo "Using fallback to retrieve DEV_VERSION"
    DEV_VERSION=$(curl -sS https://raw.githubusercontent.com/eclipse/xtext/main/pom.xml|grep -Po "([0-9]+\.[0-9]+\.[0-9]+)-SNAPSHOT" |sed 's/-SNAPSHOT//')
 fi
@@ -58,12 +63,12 @@ ECLIPSE_XTEXT_VERSION=${VERSIONS[0]}
 
 
 
-if [ -z "$NEW_VERSION" ]; then
+if [ -z "${NEW_VERSION:-}" ]; then
   # if not set in environment use default
   NEW_VERSION=$DEV_VERSION
 fi
 
-if [ -z "$OLD_VERSION" ]; then
+if [ -z "${OLD_VERSION:-}" ]; then
   # if not set in environment use default
   OLD_VERSION=${VERSIONS[0]}
 fi
@@ -93,12 +98,23 @@ download () {
     ZIP_FILE=tmf-xtext-Update-$XTEXT_VERSION.zip
     if [ ! -d tmf-xtext-Update-$XTEXT_VERSION ]; then
         echo "Downloading Xtext $XTEXT_VERSION from $DOWNLOAD_URL"
-        HTTP_CODE=$(curl -sS -I -o /dev/null -w '%{http_code}' $DOWNLOAD_URL)
+        DOWNLOAD_LOG_PREFIX="$LOG_DIR/download-$XTEXT_VERSION"
+        HTTP_CODE=$(curl -m 1200 -sS -L \
+            -D "$DOWNLOAD_LOG_PREFIX.headers" \
+            -o "$ZIP_FILE" \
+            -w '%{http_code}' \
+            "$DOWNLOAD_URL")
+        {
+            echo "url=$DOWNLOAD_URL"
+            echo "http_code=$HTTP_CODE"
+        } > "$DOWNLOAD_LOG_PREFIX.meta"
         if [ "$HTTP_CODE" != "200" ]; then
             echo "Unexpected HTTP $HTTP_CODE: $DOWNLOAD_URL"
+            echo "Response headers were written to $DOWNLOAD_LOG_PREFIX.headers"
+            echo "Response body starts with:"
+            sed -n '1,40p' "$ZIP_FILE"
             exit 1
         fi
-        curl -m 1200 -sL $DOWNLOAD_URL --output $ZIP_FILE
         if ! unzip -t $ZIP_FILE > /dev/null 2>&1; then
             echo "Downloaded file is not a valid zip: $DOWNLOAD_URL"
             rm -f $ZIP_FILE
@@ -125,9 +141,9 @@ for ((idx=0; idx<${#BUILD_IDS[@]}; ++idx)); do
 
       if [ -z "$BUILD_ID" ];
       then
-         download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
-      else
          download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/tmf-xtext-Update-$VERSION.zip"
+      else
+         download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
       fi
    fi
 done

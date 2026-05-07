@@ -65,7 +65,7 @@ pipeline {
   
   post {
     always {
-      archiveArtifacts artifacts: 'output/**, eclipse/.director-ws/.metadata/.log'
+      archiveArtifacts artifacts: 'output/**, logs/**, eclipse/.director-ws/.metadata/.log'
     }
     cleanup {
       script {
@@ -106,7 +106,7 @@ pipeline {
 
 def getCurrentXtextVersion (branch) {
   env.BRANCH_REF="${branch}"
-  version = sh (returnStdout: true, 
+  def version = sh (returnStdout: true,
     script: 'curl -sSL -H "Cookie: logged_in=no" -H "Authorization: token $GITHUB_API_TOKEN" -H "Content-Type: text/plain; charset=utf-8" https://api.github.com/repos/eclipse/xtext/contents/pom.xml?ref=$BRANCH_REF| jq -r ".content" | base64 -d | grep -Po "([0-9]+\\.[0-9]+\\.[0-9]+)-SNAPSHOT"')  
   version = version.replace('-SNAPSHOT','').trim()
   return version
