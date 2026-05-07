@@ -88,21 +88,25 @@ if [ ! -d eclipse ]; then
 fi
 
 download () {
-   XTEXT_VERSION=$1
-   DOWNLOAD_URL=$2
-   ZIP_FILE=tmf-xtext-Update-$XTEXT_VERSION.zip
-
-   if [ ! -d tmf-xtext-Update-$XTEXT_VERSION ]; then
-      echo "Downloading Xtext $XTEXT_VERSION from $DOWNLOAD_URL"
-      # check existence of file
-      if [ $(curl -sS -I -o /dev/null -w '%{http_code}' $DOWNLOAD_URL) == 404 ]; then
-         echo "Not found: $DOWNLOAD_URL"
-         exit 1
-      fi
-      curl -m 1200 -sL $DOWNLOAD_URL --output $ZIP_FILE
-      unzip -q $ZIP_FILE -d tmf-xtext-Update-$XTEXT_VERSION
-      rm $ZIP_FILE
-   fi
+    XTEXT_VERSION=$1
+    DOWNLOAD_URL=$2
+    ZIP_FILE=tmf-xtext-Update-$XTEXT_VERSION.zip
+    if [ ! -d tmf-xtext-Update-$XTEXT_VERSION ]; then
+        echo "Downloading Xtext $XTEXT_VERSION from $DOWNLOAD_URL"
+        HTTP_CODE=$(curl -sS -I -o /dev/null -w '%{http_code}' $DOWNLOAD_URL)
+        if [ "$HTTP_CODE" != "200" ]; then
+            echo "Unexpected HTTP $HTTP_CODE: $DOWNLOAD_URL"
+            exit 1
+        fi
+        curl -m 1200 -sL $DOWNLOAD_URL --output $ZIP_FILE
+        if ! unzip -t $ZIP_FILE > /dev/null 2>&1; then
+            echo "Downloaded file is not a valid zip: $DOWNLOAD_URL"
+            rm -f $ZIP_FILE
+            exit 1
+        fi
+        unzip -q $ZIP_FILE -d tmf-xtext-Update-$XTEXT_VERSION
+        rm $ZIP_FILE
+    fi
 }
 
 # Download latest Xtext build
