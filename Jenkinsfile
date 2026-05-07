@@ -9,7 +9,6 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr:'15'))
     disableConcurrentBuilds()
     timeout(time: 45, unit: 'MINUTES')
-    copyArtifactPermission('xtext/main')
   }
 
   tools {
