@@ -9,6 +9,7 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr:'15'))
     disableConcurrentBuilds()
     timeout(time: 45, unit: 'MINUTES')
+    copyArtifactPermission('xtext/main')
   }
 
   tools {
@@ -43,7 +44,7 @@ pipeline {
       steps {
         script {
           copyArtifacts(
-            projectName: 'xtext/job/main',
+            projectName: 'xtext/main',
             selector: lastSuccessful(),
             filter: 'build/org.eclipse.xtext.p2repository-*.zip',
             target: '.',
