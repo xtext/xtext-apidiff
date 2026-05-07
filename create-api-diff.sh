@@ -29,25 +29,6 @@ VERSION_2_BUILDID["2.25.0"]="R202103011429"
 VERSION_2_BUILDID["2.24.0"]="R202011301016"
 
 VERSIONS=(2.42.0 2.41.0 2.40.0 2.39.0 2.38.0 2.37.0 2.36.0 2.35.0 2.34.0 2.33.0 2.32.0 2.31.0 2.30.0 2.29.0 2.28.0 2.27.0 2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
-BUILD_IDS=(""\
- ""\
- ""\
- ""\
- ""\
- ""\
- ""\
- ""\
- ""\
- ""\
- ""\
- ""\
- R202302271344\
- R202211211054\
- R202208290555\
- R202205300508\
- R202202280901\
- R202103011429\
- R202011301016)
 
 if [ -z "${DEV_VERSION:-}" ]; then
    echo "Using fallback to retrieve DEV_VERSION"
@@ -93,24 +74,24 @@ if [ ! -d eclipse ]; then
 fi
 
 download () {
-    XTEXT_VERSION=$1
-    DOWNLOAD_URL=$2
-    ZIP_FILE=tmf-xtext-Update-$XTEXT_VERSION.zip
+    local XTEXT_VERSION=$1
+    local DOWNLOAD_URL=$2
+    local ZIP_FILE=tmf-xtext-Update-$XTEXT_VERSION.zip
 
     # For DEV version, check if already copied by Jenkins copyartifact plugin
     if [[ "$XTEXT_VERSION" == "$DEV_VERSION" ]]; then
-        pre_copied="org.eclipse.xtext.p2repository-${XTEXT_VERSION}-SNAPSHOT.zip"
+        local pre_copied="org.eclipse.xtext.p2repository-${XTEXT_VERSION}-SNAPSHOT.zip"
         if [ -f "$pre_copied" ]; then
             echo "Using pre-copied artifact: $pre_copied"
-            unzip -q "$pre_copied" -d "tmf-xtext-Update-${XTEXT_VERSION}"
+            unzip -oq "$pre_copied" -d "tmf-xtext-Update-${XTEXT_VERSION}"
             return 0
         fi
     fi
 
     if [ ! -d tmf-xtext-Update-$XTEXT_VERSION ]; then
         echo "Downloading Xtext $XTEXT_VERSION from $DOWNLOAD_URL"
-        DOWNLOAD_LOG_PREFIX="$LOG_DIR/download-$XTEXT_VERSION"
-        HTTP_CODE=$(curl -m 1200 -sS -L \
+        local DOWNLOAD_LOG_PREFIX="$LOG_DIR/download-$XTEXT_VERSION"
+        local HTTP_CODE=$(curl -m 1200 -sS -L \
             -D "$DOWNLOAD_LOG_PREFIX.headers" \
             -o "$ZIP_FILE" \
             -w '%{http_code}' \
@@ -131,7 +112,7 @@ download () {
             rm -f $ZIP_FILE
             exit 1
         fi
-        unzip -q $ZIP_FILE -d tmf-xtext-Update-$XTEXT_VERSION
+        unzip -oq $ZIP_FILE -d tmf-xtext-Update-$XTEXT_VERSION
         rm $ZIP_FILE
     fi
 }
@@ -144,17 +125,19 @@ DOWNLOAD_URL=https://ci.eclipse.org/xtext/job/xtext/job/main/lastStableBuild/art
 download $DEV_VERSION $DOWNLOAD_URL
 
 # download NEW_VERSION and OLD_VERSION if not present
-for ((idx=0; idx<${#BUILD_IDS[@]}; ++idx)); do
-   VERSION=${VERSIONS[idx]}
-   BUILD_ID=${BUILD_IDS[idx]}
+for VERSION in "${VERSIONS[@]}"; do
    # only download relevant versions
-   if [ $VERSION == $NEW_VERSION ] || [ $VERSION == $OLD_VERSION ]; then
+   if [ "$VERSION" == "$NEW_VERSION" ] || [ "$VERSION" == "$OLD_VERSION" ]; then
+      # Skip DEV_VERSION as it's handled above
+      if [ "$VERSION" == "$DEV_VERSION" ]; then
+         continue
+      fi
 
-      if [ -z "$BUILD_ID" ];
-      then
-         download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/tmf-xtext-Update-$VERSION.zip"
+      BUILD_ID=${VERSION_2_BUILDID[$VERSION]:-}
+      if [ -z "$BUILD_ID" ]; then
+         download "$VERSION" "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/tmf-xtext-Update-$VERSION.zip"
       else
-         download $VERSION "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
+         download "$VERSION" "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
       fi
    fi
 done
