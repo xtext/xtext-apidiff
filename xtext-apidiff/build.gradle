@@ -7,7 +7,7 @@ buildscript {
 }
 
 plugins {
-	id 'com.github.johnrengelman.shadow' version '7.1.2'
+	id 'com.gradleup.shadow' version '9.4.1'
 }
 
 repositories.mavenCentral()
@@ -16,16 +16,22 @@ ext.xtextVersion = '2.30.0'
 
 apply plugin: 'java'
 apply plugin: 'application'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.gradleup.shadow'
 apply plugin: 'org.xtext.xtend'
 apply plugin: 'eclipse'
-mainClassName = "de.dhuebner.japicmp.CheckFolder"
+
+application {
+	mainClass = "de.dhuebner.japicmp.CheckFolder"
+}
+
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'ISO-8859-1'
 }
 
-sourceCompatibility = '11'
+java {
+	sourceCompatibility = '11'
+}
 
 dependencies {
 	implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtextVersion"

@@ -42,25 +42,25 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 public class MultiPageHtmlReport extends XmlOutputGenerator {
   public enum MenuKind {
     OVERVIEW,
-    
+
     REMOVED,
-    
+
     ADDED,
-    
+
     BREAKING;
   }
-  
+
   private ReporterInformation info;
-  
+
   public MultiPageHtmlReport(final List<JApiClass> jApiClasses, final Options options, final XmlOutputGeneratorOptions xmlOptions) {
     super(jApiClasses, options, xmlOptions);
   }
-  
+
   public MultiPageHtmlReport(final ReporterInformation info, final List<JApiClass> jApiClasses, final Options options, final XmlOutputGeneratorOptions xmlOptions) {
     this(jApiClasses, options, xmlOptions);
     this.info = info;
   }
-  
+
   @Override
   public XmlOutput generate() {
     try {
@@ -116,7 +116,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       throw Exceptions.sneakyThrow(_e);
     }
   }
-  
+
   public long copyResources(final File outputRoot) {
     long _xblockexpression = (long) 0;
     {
@@ -130,7 +130,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return _xblockexpression;
   }
-  
+
   public long copyResourceUsingClassloder(final File destFolder, final String fileName) {
     try {
       return Files.copy(this.getClass().getClassLoader().getResourceAsStream(("html/" + fileName)), new File(destFolder, fileName).toPath(), 
@@ -139,7 +139,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       throw Exceptions.sneakyThrow(_e);
     }
   }
-  
+
   public CharSequence createStartPage() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\"\"http://www.w3.org/TR/REC-html40/frameset.dtd\">");
@@ -179,7 +179,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.newLine();
     return _builder;
   }
-  
+
   public CharSequence createMenu(final Map<String, List<JApiClass>> byPackage, final MultiPageHtmlReport.MenuKind menuKind, final Function1<? super JApiClass, ? extends Boolean> filter) {
     CharSequence _xblockexpression = null;
     {
@@ -374,7 +374,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return _xblockexpression;
   }
-  
+
   public CharSequence createPackageSiteContent(final String packageName, final Map<String, List<JApiClass>> byPackage) {
     final Function0<CharSequence> _function = () -> {
       StringConcatenation _builder = new StringConcatenation();
@@ -973,7 +973,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     };
     return this.packageFileBody(packageName, _function);
   }
-  
+
   public <T extends JApiCompatibility & JApiHasChangeStatus> String changeStatusLabel(final T japiType) {
     JApiChangeStatus _changeStatus = japiType.getChangeStatus();
     String _xifexpression = null;
@@ -986,7 +986,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return (_changeStatus + _xifexpression);
   }
-  
+
   public CharSequence createStatistics(final Map<String, List<JApiClass>> byPackage) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
@@ -1120,7 +1120,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.newLine();
     return _builder;
   }
-  
+
   public String toStatusLable(final JApiClass clazz) {
     String lable = clazz.getNewClass().or(clazz.getOldClass()).get().getSimpleName();
     boolean _isBinaryCompatible = clazz.isBinaryCompatible();
@@ -1130,7 +1130,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return lable;
   }
-  
+
   protected CharSequence _toHtml(final JApiModifier<AccessModifier> modifier) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = modifier.getChangeStatus();
@@ -1154,7 +1154,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return _xifexpression;
   }
-  
+
   protected CharSequence _toHtml(final JApiParameter param) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("<span title=\"");
@@ -1166,7 +1166,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.append("</span>");
     return _builder;
   }
-  
+
   protected CharSequence _toHtml(final JApiReturnType retType) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = retType.getChangeStatus();
@@ -1218,7 +1218,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return _xifexpression;
   }
-  
+
   public String cutQualifier(final String string) {
     final int lastDot = string.lastIndexOf(".");
     if ((lastDot > 0)) {
@@ -1226,7 +1226,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return string;
   }
-  
+
   protected CharSequence _toHtml(final JApiAnnotationElement it) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = it.getChangeStatus();
@@ -1258,7 +1258,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return _xifexpression;
   }
-  
+
   protected CharSequence _toHtml(final JApiAnnotation it) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = it.getChangeStatus();
@@ -1286,7 +1286,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return _xifexpression;
   }
-  
+
   public CharSequence packageFileBody(final String packageName, final Function0<? extends CharSequence> sequence) {
     CharSequence _xblockexpression = null;
     {
@@ -1395,7 +1395,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     }
     return _xblockexpression;
   }
-  
+
   public CharSequence toHtml(final Object it) {
     if (it instanceof JApiAnnotation) {
       return _toHtml((JApiAnnotation)it);
