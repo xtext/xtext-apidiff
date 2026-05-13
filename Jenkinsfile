@@ -39,7 +39,7 @@ pipeline {
         }
       }
     }
-    stage('Copy Xtext DEV Build') {
+    stage('Copy Xtext Nightly Build') {
       steps {
         script {
           copyArtifacts(
