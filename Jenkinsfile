@@ -43,7 +43,7 @@ pipeline {
       steps {
         script {
           copyArtifacts(
-            projectName: 'xtext/main',
+            projectName: 'xtext-monorepo-full-deploy-nightly',
             selector: lastSuccessful(),
             filter: 'build/org.eclipse.xtext.p2repository-*.zip',
             target: '.',
