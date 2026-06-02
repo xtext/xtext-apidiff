@@ -37,10 +37,10 @@ if [ -z "${DEV_VERSION:-}" ]; then
 fi
 
 # The Eclipse release to use
-# https://download.eclipse.org/eclipse/downloads/drops4/R-4.31-202402290520/download.php?dropFile=eclipse-SDK-4.31-linux-gtk-x86_64.tar.gz
-ECLIPSE_RELEASE=2024-03
-ECLIPSE_TARGZ_FILE=eclipse-SDK-4.31-linux-gtk-x86_64.tar.gz
-ECLIPSE_TARGZ_DOWNLOAD_URL=https://download.eclipse.org/eclipse/downloads/drops4/R-4.31-202402290520/$ECLIPSE_TARGZ_FILE
+# https://archive.eclipse.org/eclipse/downloads/drops4/R-4.38-202512010920/download.php?dropFile=eclipse-SDK-4.38-linux-gtk-x86_64.tar.gz
+ECLIPSE_RELEASE=2025-12
+ECLIPSE_TARGZ_FILE=eclipse-SDK-4.38-linux-gtk-x86_64.tar.gz
+ECLIPSE_TARGZ_DOWNLOAD_URL=https://archive.eclipse.org/eclipse/downloads/drops4/R-4.38-202512010920/$ECLIPSE_TARGZ_FILE
 ECLIPSE_XTEXT_VERSION=${VERSIONS[0]}
 
 
