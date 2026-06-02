@@ -1,6 +1,5 @@
 package de.dhuebner.japicmp;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import japicmp.config.Options;
 import japicmp.model.AccessModifier;
@@ -29,6 +28,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import javassist.CtClass;
 import javassist.bytecode.annotation.MemberValue;
@@ -37,6 +37,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.XbaseGenerated;
 
 @SuppressWarnings("all")
 public class MultiPageHtmlReport extends XmlOutputGenerator {
@@ -77,19 +78,19 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       String _plus_1 = (outputFolder + "/package-overview.html");
       final Function1<JApiClass, Boolean> _function_1 = (JApiClass it) -> {
         JApiChangeStatus _changeStatus = it.getChangeStatus();
-        return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.MODIFIED));
+        return Boolean.valueOf(Objects.equals(_changeStatus, JApiChangeStatus.MODIFIED));
       };
       new PrintWriter(_plus_1).append(this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.OVERVIEW, _function_1)).close();
       String _plus_2 = (outputFolder + "/removed-overview.html");
       final Function1<JApiClass, Boolean> _function_2 = (JApiClass it) -> {
         JApiChangeStatus _changeStatus = it.getChangeStatus();
-        return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.REMOVED));
+        return Boolean.valueOf(Objects.equals(_changeStatus, JApiChangeStatus.REMOVED));
       };
       new PrintWriter(_plus_2).append(this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.REMOVED, _function_2)).close();
       String _plus_3 = (outputFolder + "/added-overview.html");
       final Function1<JApiClass, Boolean> _function_3 = (JApiClass it) -> {
         JApiChangeStatus _changeStatus = it.getChangeStatus();
-        return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.NEW));
+        return Boolean.valueOf(Objects.equals(_changeStatus, JApiChangeStatus.NEW));
       };
       new PrintWriter(_plus_3).append(this.createMenu(byPackage, MultiPageHtmlReport.MenuKind.ADDED, _function_3)).close();
       String _plus_4 = (outputFolder + "/breaking-overview.html");
@@ -221,7 +222,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
       _builder.append("<ul class=\"navList\" title=\"Navigation\">");
       _builder.newLine();
       {
-        boolean _equals = Objects.equal(menuKind, MultiPageHtmlReport.MenuKind.REMOVED);
+        boolean _equals = Objects.equals(menuKind, MultiPageHtmlReport.MenuKind.REMOVED);
         if (_equals) {
           _builder.append("<li><a href=\"package-overview.html\" target=\"leftframe\">Overview</a></li>");
           _builder.newLine();
@@ -232,7 +233,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           _builder.append("<li><a href=\"breaking-overview.html\" target=\"leftframe\">Critical</a></li>");
           _builder.newLine();
         } else {
-          boolean _equals_1 = Objects.equal(menuKind, MultiPageHtmlReport.MenuKind.ADDED);
+          boolean _equals_1 = Objects.equals(menuKind, MultiPageHtmlReport.MenuKind.ADDED);
           if (_equals_1) {
             _builder.append("<li><a href=\"package-overview.html\" target=\"leftframe\">Overview</a></li>");
             _builder.newLine();
@@ -243,7 +244,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
             _builder.append("<li><a href=\"breaking-overview.html\" target=\"leftframe\">Critical</a></li>");
             _builder.newLine();
           } else {
-            boolean _equals_2 = Objects.equal(menuKind, MultiPageHtmlReport.MenuKind.OVERVIEW);
+            boolean _equals_2 = Objects.equals(menuKind, MultiPageHtmlReport.MenuKind.OVERVIEW);
             if (_equals_2) {
               _builder.append("<li class=\"navBarCell1Rev\">Overview</li>");
               _builder.newLine();
@@ -254,7 +255,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.append("<li><a href=\"breaking-overview.html\" target=\"leftframe\">Critical</a></li>");
               _builder.newLine();
             } else {
-              boolean _equals_3 = Objects.equal(menuKind, MultiPageHtmlReport.MenuKind.BREAKING);
+              boolean _equals_3 = Objects.equals(menuKind, MultiPageHtmlReport.MenuKind.BREAKING);
               if (_equals_3) {
                 _builder.append("<li><a href=\"package-overview.html\" target=\"leftframe\">Overview</a></li>");
                 _builder.newLine();
@@ -447,7 +448,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           {
             String _serialVersionUidDefaultOldAsString = clazzReport_1.getSerialVersionUid().getSerialVersionUidDefaultOldAsString();
             String _serialVersionUidDefaultNewAsString = clazzReport_1.getSerialVersionUid().getSerialVersionUidDefaultNewAsString();
-            boolean _notEquals = (!Objects.equal(_serialVersionUidDefaultOldAsString, _serialVersionUidDefaultNewAsString));
+            boolean _notEquals = (!Objects.equals(_serialVersionUidDefaultOldAsString, _serialVersionUidDefaultNewAsString));
             if (_notEquals) {
               _builder.append("<h3><font color=\"red\">(Serializable incompatible(!): default serialVersionUID changed)</font></h3>");
               _builder.newLine();
@@ -626,7 +627,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
           }
           {
             JApiChangeStatus _changeStatus_3 = clazzReport_1.getSuperclass().getChangeStatus();
-            boolean _notEquals_1 = (!Objects.equal(_changeStatus_3, JApiChangeStatus.UNCHANGED));
+            boolean _notEquals_1 = (!Objects.equals(_changeStatus_3, JApiChangeStatus.UNCHANGED));
             if (_notEquals_1) {
               _builder.append("<!-- ======== superclass SUMMARY ======== -->");
               _builder.newLine();
@@ -1079,7 +1080,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.append("<dd>");
     final Function1<JApiClass, Boolean> _function_1 = (JApiClass it) -> {
       JApiChangeStatus _changeStatus = it.getChangeStatus();
-      return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.NEW));
+      return Boolean.valueOf(Objects.equals(_changeStatus, JApiChangeStatus.NEW));
     };
     int _size_3 = IterableExtensions.size(IterableExtensions.<JApiClass>filter(allClasses, _function_1));
     _builder.append(_size_3);
@@ -1090,7 +1091,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     _builder.append("<dd>");
     final Function1<JApiClass, Boolean> _function_2 = (JApiClass it) -> {
       JApiChangeStatus _changeStatus = it.getChangeStatus();
-      return Boolean.valueOf(Objects.equal(_changeStatus, JApiChangeStatus.REMOVED));
+      return Boolean.valueOf(Objects.equals(_changeStatus, JApiChangeStatus.REMOVED));
     };
     int _size_4 = IterableExtensions.size(IterableExtensions.<JApiClass>filter(allClasses, _function_2));
     _builder.append(_size_4);
@@ -1134,7 +1135,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
   protected CharSequence _toHtml(final JApiModifier<AccessModifier> modifier) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = modifier.getChangeStatus();
-    boolean _equals = Objects.equal(_changeStatus, JApiChangeStatus.MODIFIED);
+    boolean _equals = Objects.equals(_changeStatus, JApiChangeStatus.MODIFIED);
     if (_equals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike>");
@@ -1170,7 +1171,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
   protected CharSequence _toHtml(final JApiReturnType retType) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = retType.getChangeStatus();
-    boolean _equals = Objects.equal(_changeStatus, JApiChangeStatus.MODIFIED);
+    boolean _equals = Objects.equals(_changeStatus, JApiChangeStatus.MODIFIED);
     if (_equals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike title=\"");
@@ -1192,7 +1193,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     } else {
       CharSequence _xifexpression_1 = null;
       String _newReturnType_1 = retType.getNewReturnType();
-      boolean _notEquals = (!Objects.equal("n.a.", _newReturnType_1));
+      boolean _notEquals = (!Objects.equals("n.a.", _newReturnType_1));
       if (_notEquals) {
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append("<span title=\"");
@@ -1230,7 +1231,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
   protected CharSequence _toHtml(final JApiAnnotationElement it) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = it.getChangeStatus();
-    boolean _equals = Objects.equal(_changeStatus, JApiChangeStatus.MODIFIED);
+    boolean _equals = Objects.equals(_changeStatus, JApiChangeStatus.MODIFIED);
     if (_equals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike>");
@@ -1243,7 +1244,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     } else {
       String _xifexpression_1 = null;
       Optional<MemberValue> _newValue = it.getNewValue();
-      boolean _notEquals = (!Objects.equal("n.a.", _newValue));
+      boolean _notEquals = (!Objects.equals("n.a.", _newValue));
       if (_notEquals) {
         String _xifexpression_2 = null;
         boolean _isPresent = it.getNewValue().isPresent();
@@ -1262,7 +1263,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
   protected CharSequence _toHtml(final JApiAnnotation it) {
     CharSequence _xifexpression = null;
     JApiChangeStatus _changeStatus = it.getChangeStatus();
-    boolean _equals = Objects.equal(_changeStatus, JApiChangeStatus.MODIFIED);
+    boolean _equals = Objects.equals(_changeStatus, JApiChangeStatus.MODIFIED);
     if (_equals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<strike>");
@@ -1396,6 +1397,7 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
     return _xblockexpression;
   }
 
+  @XbaseGenerated
   public CharSequence toHtml(final Object it) {
     if (it instanceof JApiAnnotation) {
       return _toHtml((JApiAnnotation)it);
