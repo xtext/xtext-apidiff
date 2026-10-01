@@ -8,6 +8,7 @@ LOG_DIR=${LOG_DIR:-logs}
 mkdir -p "$LOG_DIR"
 
 declare -A VERSION_2_BUILDID
+VERSION_2_BUILDID["2.44.0"]=""
 VERSION_2_BUILDID["2.43.0"]=""
 VERSION_2_BUILDID["2.42.0"]=""
 VERSION_2_BUILDID["2.41.0"]=""
@@ -29,7 +30,7 @@ VERSION_2_BUILDID["2.26.0"]="R202202280901"
 VERSION_2_BUILDID["2.25.0"]="R202103011429"
 VERSION_2_BUILDID["2.24.0"]="R202011301016"
 
-VERSIONS=(2.43.0 2.42.0 2.41.0 2.40.0 2.39.0 2.38.0 2.37.0 2.36.0 2.35.0 2.34.0 2.33.0 2.32.0 2.31.0 2.30.0 2.29.0 2.28.0 2.27.0 2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
+VERSIONS=(2.44.0 2.43.0 2.42.0 2.41.0 2.40.0 2.39.0 2.38.0 2.37.0 2.36.0 2.35.0 2.34.0 2.33.0 2.32.0 2.31.0 2.30.0 2.29.0 2.28.0 2.27.0 2.26.0 2.25.0 2.24.0 2.23.0 2.22.0 2.21.0 2.20.0 2.19.0 2.18.0 2.17.1 2.7.0)
 
 if [ -z "${DEV_VERSION:-}" ]; then
    echo "Using fallback to retrieve DEV_VERSION"
@@ -68,8 +69,8 @@ if [ ! -d eclipse ]; then
    echo "Installing additional features: Xtext and dependent"
    eclipse/eclipse -data eclipse/.director-ws -consolelog -noSplash -clean \
    -application org.eclipse.equinox.p2.director \
-   -metadataRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.26.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/1.0.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
-   -artifactRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.26.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/1.0.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -metadataRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.27.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/1.0.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
+   -artifactRepository https://download.eclipse.org/modeling/tmf/xtext/updates/releases/$ECLIPSE_XTEXT_VERSION,https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.27.0,https://download.eclipse.org/releases/$ECLIPSE_RELEASE,https://download.eclipse.org/lsp4j/updates/releases/1.0.0/,https://download.eclipse.org/tools/orbit/downloads/$ECLIPSE_RELEASE \
    -installIU org.eclipse.xtext.sdk.feature.group,org.eclipse.lsp4j.sdk.feature.group,org.eclipse.m2e.core,org.eclipse.buildship.core,org.kohsuke.args4j,org.eclipse.draw2d \
    -destination eclipse
 fi
