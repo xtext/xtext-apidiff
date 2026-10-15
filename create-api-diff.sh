@@ -7,12 +7,6 @@ set -Eeuo pipefail
 LOG_DIR=${LOG_DIR:-logs}
 mkdir -p "$LOG_DIR"
 
-declare -A VERSION_2_BUILDID
-VERSION_2_BUILDID["2.44.0"]=""
-VERSION_2_BUILDID["2.43.0"]=""
-VERSION_2_BUILDID["2.42.0"]=""
-VERSION_2_BUILDID["2.41.0"]=""
-
 VERSIONS=(2.44.0 2.43.0 2.42.0 2.41.0)
 
 if [ -z "${DEV_VERSION:-}" ]; then
@@ -118,12 +112,7 @@ for VERSION in "${VERSIONS[@]}"; do
          continue
       fi
 
-      BUILD_ID=${VERSION_2_BUILDID[$VERSION]:-}
-      if [ -z "$BUILD_ID" ]; then
-         download "$VERSION" "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/tmf-xtext-Update-$VERSION.zip"
-      else
-         download "$VERSION" "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/$BUILD_ID/tmf-xtext-Update-$VERSION.zip"
-      fi
+      download "$VERSION" "https://download.eclipse.org/modeling/tmf/xtext/downloads/drops/$VERSION/tmf-xtext-Update-$VERSION.zip"
    fi
 done
 
