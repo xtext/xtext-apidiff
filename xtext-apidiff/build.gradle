@@ -30,7 +30,7 @@ tasks.withType(JavaCompile) {
 }
 
 java {
-	sourceCompatibility = '11'
+	sourceCompatibility = '21'
 }
 
 dependencies {
