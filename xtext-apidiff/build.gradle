@@ -1,23 +1,13 @@
-buildscript {
-	repositories.mavenCentral()
-	repositories.gradlePluginPortal()
-	dependencies {
-		classpath 'org.xtext:xtext-gradle-plugin:4.0.0'
-	}
-}
-
 plugins {
-	id 'com.gradleup.shadow' version '9.4.1'
+	id 'com.gradleup.shadow' version '9.6.1'
 }
 
 repositories.mavenCentral()
 
-ext.xtextVersion = '2.41.0'
 
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'com.gradleup.shadow'
-apply plugin: 'org.xtext.xtend'
 apply plugin: 'eclipse'
 
 application {
@@ -26,7 +16,7 @@ application {
 
 
 tasks.withType(JavaCompile) {
-	options.encoding = 'ISO-8859-1'
+	options.encoding = 'UTF-8'
 }
 
 java {
@@ -34,7 +24,6 @@ java {
 }
 
 dependencies {
-	implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtextVersion"
 	implementation 'com.github.siom79.japicmp:japicmp:0.15.4'
 	implementation 'com.sun.xml.bind:jaxb-core:3.0.2'
 	implementation 'com.sun.xml.bind:jaxb-impl:3.0.2'
@@ -43,9 +32,8 @@ dependencies {
 
 sourceSets {
 	main {
-		java.srcDirs = ['src', 'xtend-gen']
+		java.srcDirs = ['src']
 		resources.srcDirs = ['src', 'resources']
-		xtend.outputDir = 'xtend-gen'
 	}
 	test {
 		java.srcDirs = []
