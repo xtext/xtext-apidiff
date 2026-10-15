@@ -16,3 +16,5 @@ tmf-xtext-Update*
 eclipse
 output
 japicmp.properties
+logs/
+org.eclipse.xtext.p2repository-*.zip
