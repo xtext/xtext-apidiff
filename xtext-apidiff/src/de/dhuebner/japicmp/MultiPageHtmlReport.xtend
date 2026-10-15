@@ -284,7 +284,7 @@ class MultiPageHtmlReport extends XmlOutputGenerator {
 								</tr>
 								<tr class="rowColor">
 									<td class="colFirst colStatus col«clazzReport.superclass.changeStatus»">«clazzReport.superclass.changeStatusLabel»</code></td>
-									<td class="colLast"><code>«clazzReport.superclass.newSuperclass.or(clazzReport.superclass.oldSuperclass).get»</code></td>
+									<td class="colLast"><code>«clazzReport.superclass.newSuperclass.or(clazzReport.superclass.oldSuperclass).get.name»</code></td>
 								</tr>
 								</tbody></table>
 								</li>

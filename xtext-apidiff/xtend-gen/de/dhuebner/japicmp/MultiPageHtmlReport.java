@@ -668,8 +668,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
               _builder.newLineIfNotEmpty();
               _builder.append("\t\t");
               _builder.append("<td class=\"colLast\"><code>");
-              CtClass _get_2 = clazzReport_1.getSuperclass().getNewSuperclass().or(clazzReport_1.getSuperclass().getOldSuperclass()).get();
-              _builder.append(_get_2, "\t\t");
+              String _name = clazzReport_1.getSuperclass().getNewSuperclass().or(clazzReport_1.getSuperclass().getOldSuperclass()).get().getName();
+              _builder.append(_name, "\t\t");
               _builder.append("</code></td>");
               _builder.newLineIfNotEmpty();
               _builder.append("\t");
@@ -746,8 +746,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
                   _builder.append("<td class=\"colLast\"><code><strong>");
-                  String _name = fieldChange.getName();
-                  _builder.append(_name, "\t");
+                  String _name_1 = fieldChange.getName();
+                  _builder.append(_name_1, "\t");
                   _builder.append("</strong></code>&nbsp;</td>");
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
@@ -826,8 +826,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
                   _builder.append("<td class=\"colLast\"><code><strong>");
-                  String _name_1 = constructorChange.getName();
-                  _builder.append(_name_1, "\t");
+                  String _name_2 = constructorChange.getName();
+                  _builder.append(_name_2, "\t");
                   _builder.append("</strong>(");
                   final Function1<JApiParameter, CharSequence> _function_2 = (JApiParameter it) -> {
                     return this.toHtml(it);
@@ -919,8 +919,8 @@ public class MultiPageHtmlReport extends XmlOutputGenerator {
                   _builder.append("\t");
                   _builder.append("\t");
                   _builder.append("<code><strong>");
-                  String _name_2 = methodeChange.getName();
-                  _builder.append(_name_2, "\t\t");
+                  String _name_3 = methodeChange.getName();
+                  _builder.append(_name_3, "\t\t");
                   _builder.append("</strong>(");
                   final Function1<JApiParameter, CharSequence> _function_3 = (JApiParameter it) -> {
                     return this.toHtml(it);
